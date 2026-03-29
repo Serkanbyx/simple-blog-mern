@@ -162,7 +162,7 @@ const AdminDashboard = () => {
     <div>
       {/* Header */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Admin Dashboard</h1>
         <Link
           to="/admin/posts/new"
           className="inline-flex items-center gap-2 self-start rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -303,6 +303,7 @@ const AdminDashboard = () => {
                     <img
                       src={post.image || PLACEHOLDER_IMAGE}
                       alt={post.title}
+                      loading="lazy"
                       onError={(e) => { e.target.src = PLACEHOLDER_IMAGE }}
                       className="h-10 w-16 rounded-lg object-cover"
                     />
@@ -350,6 +351,7 @@ const AdminDashboard = () => {
                 <img
                   src={post.image || PLACEHOLDER_IMAGE}
                   alt={post.title}
+                  loading="lazy"
                   onError={(e) => { e.target.src = PLACEHOLDER_IMAGE }}
                   className="h-16 w-20 shrink-0 rounded-lg object-cover"
                 />

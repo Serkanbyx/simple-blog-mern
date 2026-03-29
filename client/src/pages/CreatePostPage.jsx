@@ -30,7 +30,7 @@ const CreatePostPage = () => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Yeni Gönderi</h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Yeni Gönderi</h1>
       </div>
 
       <PostForm onSubmit={handleSubmit} />

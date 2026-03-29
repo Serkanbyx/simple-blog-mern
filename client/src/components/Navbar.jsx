@@ -116,7 +116,7 @@ const Navbar = () => {
             end
             onClick={closeMobileMenu}
           >
-            Home
+            <span className="block py-2">Home</span>
           </NavLink>
 
           {user ? (
@@ -127,11 +127,11 @@ const Navbar = () => {
                   className={navLinkClass}
                   onClick={closeMobileMenu}
                 >
-                  Admin Dashboard
+                  <span className="block py-2">Admin Dashboard</span>
                 </NavLink>
               )}
 
-              <span className="py-1 text-sm text-gray-500">
+              <span className="py-2 text-sm text-gray-500">
                 Welcome,{' '}
                 <span className="font-medium text-gray-700">
                   {user.username}
@@ -143,7 +143,7 @@ const Navbar = () => {
                   logout()
                   closeMobileMenu()
                 }}
-                className="mt-1 w-full rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer"
+                className="mt-1 w-full rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer"
               >
                 Logout
               </button>
@@ -155,11 +155,11 @@ const Navbar = () => {
                 className={navLinkClass}
                 onClick={closeMobileMenu}
               >
-                Login
+                <span className="block py-2">Login</span>
               </NavLink>
               <NavLink
                 to="/register"
-                className="mt-1 block rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                className="mt-1 block rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-blue-700"
                 onClick={closeMobileMenu}
               >
                 Register

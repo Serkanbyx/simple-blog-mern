@@ -88,7 +88,7 @@ const RegisterPage = () => {
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
-      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-lg">
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg sm:p-8">
         <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
           Create Account
         </h1>

@@ -426,7 +426,8 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                   <img
                     src={imagePreview}
                     alt={hasExistingImage ? 'Mevcut görsel' : 'Yüklenen görsel önizleme'}
-                    className="h-48 w-full object-cover"
+                    loading="lazy"
+                    className="aspect-3/2 w-full object-cover"
                   />
                   {uploading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40">
@@ -476,7 +477,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Markdown formatında içerik yazın..."
-                rows={16}
+                rows={10}
                 className={`w-full resize-y rounded-lg border px-4 py-3 font-mono text-sm leading-relaxed transition-colors focus:ring-2 focus:outline-none ${
                   errors.content
                     ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
@@ -492,11 +493,11 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
             </div>
 
             {/* Action buttons */}
-            <div className="flex items-center gap-4 border-t border-gray-200 pt-6">
+            <div className="flex flex-col gap-3 border-t border-gray-200 pt-6 sm:flex-row sm:items-center sm:gap-4">
               <button
                 type="submit"
                 disabled={submitting || uploading}
-                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60"
               >
                 {submitting ? (
                   <>
@@ -520,7 +521,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
               </button>
               <Link
                 to="/admin"
-                className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                className="rounded-lg border border-gray-300 px-5 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
               >
                 İptal
               </Link>
@@ -529,7 +530,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
 
           {/* Right — Markdown Preview */}
           <div className="flex-1 lg:max-w-[50%]">
-            <div className="sticky top-6">
+            <div className="lg:sticky lg:top-20">
               <div className="mb-3 flex items-center gap-2">
                 <svg className="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
@@ -537,13 +538,13 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                 </svg>
                 <span className="text-sm font-semibold text-gray-500">Önizleme</span>
               </div>
-              <div className="min-h-[400px] overflow-auto rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="min-h-[200px] overflow-auto rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:min-h-[400px] sm:p-6">
                 {content.trim() ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                     {content}
                   </ReactMarkdown>
                 ) : (
-                  <div className="flex h-[360px] flex-col items-center justify-center text-center">
+                  <div className="flex h-[160px] flex-col items-center justify-center text-center sm:h-[360px]">
                     <svg className="mb-3 h-12 w-12 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                     </svg>

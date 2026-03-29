@@ -67,11 +67,11 @@ const HomePage = () => {
   return (
     <div>
       {/* Hero section */}
-      <section className="mb-12 text-center">
-        <h1 className="mb-3 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+      <section className="mb-8 text-center sm:mb-12">
+        <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:mb-3 sm:text-4xl lg:text-5xl">
           Blog
         </h1>
-        <p className="mx-auto max-w-2xl text-lg text-gray-600">
+        <p className="mx-auto max-w-2xl text-base text-gray-600 sm:text-lg">
           Teknoloji, yazılım ve güncel konularda en yeni yazıları keşfedin.
         </p>
       </section>

@@ -17,7 +17,7 @@ const PostCard = ({ post }) => {
   return (
     <article className="group flex flex-col overflow-hidden rounded-xl bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
       {/* Post image */}
-      <Link to={`/post/${slug}`} className="relative block h-48 overflow-hidden">
+      <Link to={`/post/${slug}`} className="relative block aspect-3/2 overflow-hidden">
         <img
           src={image || PLACEHOLDER_IMAGE}
           alt={title}

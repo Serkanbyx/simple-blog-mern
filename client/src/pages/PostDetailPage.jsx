@@ -98,7 +98,7 @@ const markdownComponents = {
 
 const DetailSkeleton = () => (
   <div className="animate-pulse">
-    <div className="mb-8 h-64 w-full rounded-xl bg-gray-200 sm:h-80 lg:h-96" />
+    <div className="mb-6 aspect-2/1 w-full rounded-xl bg-gray-200 sm:mb-8 sm:aspect-5/2 lg:aspect-3/1" />
     <div className="mx-auto max-w-3xl">
       <div className="mb-4 h-8 w-3/4 rounded bg-gray-200" />
       <div className="mb-6 flex items-center gap-3">
@@ -214,21 +214,22 @@ const PostDetailPage = () => {
       </Link>
 
       {/* Featured image */}
-      <div className="mb-8 overflow-hidden rounded-xl shadow-sm">
+      <div className="mb-6 overflow-hidden rounded-xl shadow-sm sm:mb-8">
         <img
           src={image || PLACEHOLDER_IMAGE}
           alt={title}
+          loading="lazy"
           onError={(e) => {
             e.target.src = PLACEHOLDER_IMAGE
           }}
-          className="h-64 w-full object-cover sm:h-80 lg:h-96"
+          className="aspect-2/1 w-full object-cover sm:aspect-5/2 lg:aspect-3/1"
         />
       </div>
 
       {/* Content area */}
       <div className="mx-auto max-w-3xl">
         {/* Title */}
-        <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+        <h1 className="mb-4 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
           {title}
         </h1>
 

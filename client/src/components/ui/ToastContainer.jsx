@@ -39,13 +39,13 @@ const ToastContainer = () => {
     <div
       aria-live="polite"
       aria-label="Notifications"
-      className="fixed top-4 right-4 z-50 flex flex-col gap-3"
+      className="fixed top-4 right-4 left-4 z-50 flex flex-col items-end gap-3 sm:left-auto"
     >
       {toasts.map((toast) => (
         <div
           key={toast.id}
           role="alert"
-          className={`flex w-80 items-start gap-3 rounded-xl border px-4 py-3 shadow-lg animate-in slide-in-from-right ${STYLE_MAP[toast.type]}`}
+          className={`flex w-full items-start gap-3 rounded-xl border px-4 py-3 shadow-lg sm:w-80 ${STYLE_MAP[toast.type]}`}
           style={{
             animation: 'slideIn 0.3s ease-out',
           }}
