@@ -2,6 +2,7 @@ const express = require('express');
 const {
   getAllPosts,
   getPostBySlug,
+  getPostById,
   createPost,
   updatePost,
   deletePost,
@@ -12,6 +13,7 @@ const requireAdmin = require('../middlewares/requireAdmin');
 const router = express.Router();
 
 router.get('/', getAllPosts);
+router.get('/id/:id', verifyToken, requireAdmin, getPostById);
 router.get('/:slug', getPostBySlug);
 router.post('/', verifyToken, requireAdmin, createPost);
 router.put('/:id', verifyToken, requireAdmin, updatePost);

@@ -77,6 +77,27 @@ const getPostBySlug = async (req, res) => {
   }
 };
 
+// GET /api/posts/id/:id (admin — fetch single post by ObjectId)
+const getPostById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: 'Invalid post ID format.' });
+    }
+
+    const post = await Post.findById(id).populate('author', 'username');
+
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found.' });
+    }
+
+    res.json(post);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+};
+
 // POST /api/posts (admin only)
 const createPost = async (req, res) => {
   try {
@@ -217,4 +238,4 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { getAllPosts, getPostBySlug, createPost, updatePost, deletePost };
+module.exports = { getAllPosts, getPostBySlug, getPostById, createPost, updatePost, deletePost };
