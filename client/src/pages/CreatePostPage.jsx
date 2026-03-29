@@ -1,13 +1,21 @@
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
 import PostForm from '../components/admin/PostForm'
+import { useToast } from '../context/ToastContext'
 
 const CreatePostPage = () => {
   const navigate = useNavigate()
+  const toast = useToast()
 
   const handleSubmit = async (formData) => {
-    await api.post('/posts', formData)
-    navigate('/admin')
+    try {
+      await api.post('/posts', formData)
+      toast.success('Gönderi başarıyla oluşturuldu!')
+      navigate('/admin')
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Gönderi oluşturulurken bir hata oluştu.'
+      toast.error(msg)
+    }
   }
 
   return (

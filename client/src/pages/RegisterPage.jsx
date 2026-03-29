@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 
 const VALIDATION_RULES = {
   USERNAME_MIN: 3,
@@ -20,6 +21,7 @@ const RegisterPage = () => {
 
   const { register } = useAuth()
   const navigate = useNavigate()
+  const toast = useToast()
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -63,6 +65,7 @@ const RegisterPage = () => {
 
     try {
       await register(formData.username, formData.email, formData.password)
+      toast.success('Hesap başarıyla oluşturuldu! Hoş geldiniz.')
       navigate('/', { replace: true })
     } catch (err) {
       const serverMessage =
@@ -70,6 +73,7 @@ const RegisterPage = () => {
         err.response?.data?.error ||
         'Registration failed. Please try again.'
       setServerError(serverMessage)
+      toast.error(serverMessage)
     } finally {
       setIsSubmitting(false)
     }

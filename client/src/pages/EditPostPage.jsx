@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import api from '../api/axios'
 import PostForm from '../components/admin/PostForm'
+import { useToast } from '../context/ToastContext'
 
 const EditPostPage = () => {
   const navigate = useNavigate()
   const { id } = useParams()
+  const toast = useToast()
 
   const [postData, setPostData] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -28,8 +30,14 @@ const EditPostPage = () => {
   }, [id])
 
   const handleSubmit = async (formData) => {
-    await api.put(`/posts/${id}`, formData)
-    navigate('/admin')
+    try {
+      await api.put(`/posts/${id}`, formData)
+      toast.success('Gönderi başarıyla güncellendi!')
+      navigate('/admin')
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Gönderi güncellenirken bir hata oluştu.'
+      toast.error(msg)
+    }
   }
 
   if (fetchError) {

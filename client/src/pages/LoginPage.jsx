@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
@@ -10,6 +11,7 @@ const LoginPage = () => {
 
   const { login, isAdmin } = useAuth()
   const navigate = useNavigate()
+  const toast = useToast()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -18,6 +20,7 @@ const LoginPage = () => {
 
     try {
       const data = await login(email, password)
+      toast.success('Giriş başarılı! Hoş geldiniz.')
       const redirectPath = data.user?.role === 'admin' ? '/admin' : '/'
       navigate(redirectPath, { replace: true })
     } catch (err) {
@@ -26,6 +29,7 @@ const LoginPage = () => {
         err.response?.data?.error ||
         'Login failed. Please try again.'
       setError(serverMessage)
+      toast.error(serverMessage)
     } finally {
       setIsSubmitting(false)
     }

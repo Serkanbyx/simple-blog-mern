@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/axios'
+import { useToast } from '../context/ToastContext'
 
 const FETCH_LIMIT = 20
 
@@ -99,6 +100,7 @@ const AdminDashboard = () => {
   const [error, setError] = useState(null)
   const [deleteTarget, setDeleteTarget] = useState(null)
   const [deleting, setDeleting] = useState(false)
+  const toast = useToast()
 
   const fetchAllPosts = useCallback(async () => {
     try {
@@ -143,9 +145,10 @@ const AdminDashboard = () => {
       setDeleting(true)
       await api.delete(`/posts/${deleteTarget._id}`)
       setPosts((prev) => prev.filter((p) => p._id !== deleteTarget._id))
+      toast.success('Gönderi başarıyla silindi!')
       setDeleteTarget(null)
     } catch {
-      setError('Gönderi silinirken bir hata oluştu.')
+      toast.error('Gönderi silinirken bir hata oluştu.')
     } finally {
       setDeleting(false)
     }
