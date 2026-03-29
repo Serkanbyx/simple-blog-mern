@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const path = require('path');
 const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -21,6 +22,9 @@ app.use(compression());
 
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
+// Routes
+app.use('/api/auth', authRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
