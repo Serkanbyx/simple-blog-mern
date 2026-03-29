@@ -1,0 +1,192 @@
+### ============================================
+### Simple Blog MERN — API Test Requests
+### VS Code REST Client Extension Required
+### ============================================
+
+@baseUrl = http://localhost:5000/api
+@authToken = YOUR_TOKEN_HERE
+
+
+### ──────────────────────────────────────────
+### HEALTH CHECK
+### ──────────────────────────────────────────
+
+### Health Check
+GET {{baseUrl}}/health
+
+### ──────────────────────────────────────────
+### AUTH ROUTES
+### ──────────────────────────────────────────
+
+### Register — Normal User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "johndoe@example.com",
+  "password": "Test1234"
+}
+
+###
+
+### Register — Admin User (email must match ADMIN_EMAIL in .env)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "adminuser",
+  "email": "admin@example.com",
+  "password": "Admin1234"
+}
+
+###
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin1234"
+}
+
+###
+
+### Get Current User (Auth Required)
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{authToken}}
+
+### ──────────────────────────────────────────
+### POST ROUTES
+### ──────────────────────────────────────────
+
+### Create Post (Auth + Admin Required)
+POST {{baseUrl}}/posts
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Getting Started with React",
+  "content": "React is a popular JavaScript library for building user interfaces. It was developed by Facebook and has become one of the most widely used frontend frameworks in the industry.",
+  "category": "technology",
+  "tags": ["react", "javascript", "frontend"]
+}
+
+###
+
+### Get All Posts (Public — Default Pagination)
+GET {{baseUrl}}/posts
+
+###
+
+### Get All Posts — With Pagination
+GET {{baseUrl}}/posts?page=1&limit=6
+
+###
+
+### Get All Posts — Filter by Category
+GET {{baseUrl}}/posts?category=technology
+
+###
+
+### Get All Posts — Filter by Tag
+GET {{baseUrl}}/posts?tag=react
+
+###
+
+### Get All Posts — Search by Title
+GET {{baseUrl}}/posts?search=react
+
+###
+
+### Get All Posts — Combined Filters
+GET {{baseUrl}}/posts?page=1&limit=6&category=technology&search=react
+
+###
+
+### Get Post by Slug (Public)
+GET {{baseUrl}}/posts/getting-started-with-react
+
+###
+
+### Update Post (Auth + Admin Required)
+### Replace :id with actual MongoDB ObjectId
+PUT {{baseUrl}}/posts/:id
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "title": "Getting Started with React — Updated",
+  "content": "React is a powerful JavaScript library for building modern, interactive user interfaces. Originally developed by Facebook, it continues to be a cornerstone of frontend development.",
+  "tags": ["react", "javascript", "frontend", "web"]
+}
+
+###
+
+### Delete Post (Auth + Admin Required)
+### Replace :id with actual MongoDB ObjectId
+DELETE {{baseUrl}}/posts/:id
+Authorization: Bearer {{authToken}}
+
+### ──────────────────────────────────────────
+### UPLOAD ROUTE
+### ──────────────────────────────────────────
+
+### Upload Image (Auth + Admin Required)
+### Replace file path with an actual image on your system
+POST {{baseUrl}}/upload
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=----FormBoundary
+
+------FormBoundary
+Content-Disposition: form-data; name="image"; filename="test-image.jpg"
+Content-Type: image/jpeg
+
+< ./test-image.jpg
+------FormBoundary--
+
+### ──────────────────────────────────────────
+### ERROR CASE TESTS
+### ──────────────────────────────────────────
+
+### Register — Missing Fields (Should return 400)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "incomplete"
+}
+
+###
+
+### Login — Wrong Password (Should return 401)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "wrongpassword"
+}
+
+###
+
+### Get Me — No Token (Should return 401)
+GET {{baseUrl}}/auth/me
+
+###
+
+### Create Post — No Token (Should return 401)
+POST {{baseUrl}}/posts
+Content-Type: application/json
+
+{
+  "title": "Unauthorized Post",
+  "content": "This should fail without a token.",
+  "category": "test"
+}
+
+###
+
+### Get Post — Invalid Slug (Should return 404)
+GET {{baseUrl}}/posts/non-existent-slug-12345
