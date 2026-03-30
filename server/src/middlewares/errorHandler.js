@@ -50,6 +50,11 @@ const errorHandler = (err, req, res, next) => {
 
   // Default — 500 Internal Server Error
   const statusCode = err.statusCode || 500;
+
+  if (statusCode === 500) {
+    console.error('[ERROR]', err.message, err.stack);
+  }
+
   const response = {
     message: statusCode === 500 ? 'Internal server error.' : err.message,
   };
