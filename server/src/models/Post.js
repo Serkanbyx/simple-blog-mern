@@ -53,6 +53,10 @@ const postSchema = new Schema({
       maxlength: [30, "Tag must be at most 30 characters"],
     },
   ],
+  readingTime: {
+    type: Number,
+    default: 1,
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -79,6 +83,9 @@ postSchema.pre("validate", function () {
     this.excerpt = plain.length > EXCERPT_LENGTH
       ? plain.substring(0, EXCERPT_LENGTH) + "..."
       : plain;
+
+    const wordCount = this.content.trim().split(/\s+/).length;
+    this.readingTime = Math.max(1, Math.ceil(wordCount / 238));
   }
 
   if (!this.isNew) {

@@ -10,12 +10,13 @@ const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
 const CreatePostPage = lazy(() => import('./pages/CreatePostPage'))
 const EditPostPage = lazy(() => import('./pages/EditPostPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 const PageFallback = () => (
   <div className="flex min-h-[40vh] items-center justify-center">
     <div className="flex items-center gap-3">
       <span className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-      <span className="text-sm text-gray-500">Yükleniyor...</span>
+      <span className="text-sm text-gray-500">Loading...</span>
     </div>
   </div>
 )
@@ -55,6 +56,9 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Catch-all 404 */}
+        <Route path="*" element={<Suspense fallback={<PageFallback />}><NotFoundPage /></Suspense>} />
       </Route>
     </Routes>
   )

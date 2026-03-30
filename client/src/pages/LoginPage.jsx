@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useToast } from '../context/ToastContext'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 const LoginPage = () => {
+  useDocumentTitle('Login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -20,7 +22,7 @@ const LoginPage = () => {
 
     try {
       const data = await login(email, password)
-      toast.success('Giriş başarılı! Hoş geldiniz.')
+      toast.success('Signed in successfully. Welcome!')
       const redirectPath = data.user?.role === 'admin' ? '/admin' : '/'
       navigate(redirectPath, { replace: true })
     } catch (err) {
@@ -37,8 +39,8 @@ const LoginPage = () => {
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
-      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg sm:p-8">
-        <h1 className="mb-6 text-center text-3xl font-bold text-gray-800">
+      <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg sm:p-8 dark:bg-gray-800">
+        <h1 className="mb-6 text-center text-3xl font-bold text-gray-800 dark:text-white">
           Welcome Back
         </h1>
 

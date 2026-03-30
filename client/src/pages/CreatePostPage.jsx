@@ -2,18 +2,20 @@ import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/axios'
 import PostForm from '../components/admin/PostForm'
 import { useToast } from '../context/ToastContext'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 const CreatePostPage = () => {
+  useDocumentTitle('New Post')
   const navigate = useNavigate()
   const toast = useToast()
 
   const handleSubmit = async (formData) => {
     try {
       await api.post('/posts', formData)
-      toast.success('Gönderi başarıyla oluşturuldu!')
+      toast.success('Post created successfully!')
       navigate('/admin')
     } catch (err) {
-      const msg = err.response?.data?.message || 'Gönderi oluşturulurken bir hata oluştu.'
+      const msg = err.response?.data?.message || 'Something went wrong while creating the post.'
       toast.error(msg)
     }
   }
@@ -24,13 +26,13 @@ const CreatePostPage = () => {
         <Link
           to="/admin"
           className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
-          aria-label="Admin paneline dön"
+          aria-label="Back to admin panel"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Yeni Gönderi</h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">New Post</h1>
       </div>
 
       <PostForm onSubmit={handleSubmit} />

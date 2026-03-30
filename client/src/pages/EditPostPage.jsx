@@ -3,8 +3,10 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import api from '../api/axios'
 import PostForm from '../components/admin/PostForm'
 import { useToast } from '../context/ToastContext'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 const EditPostPage = () => {
+  useDocumentTitle('Edit Post')
   const navigate = useNavigate()
   const { id } = useParams()
   const toast = useToast()
@@ -19,7 +21,7 @@ const EditPostPage = () => {
         const { data } = await api.get(`/posts/id/${id}`)
         setPostData(data)
       } catch (err) {
-        const msg = err.response?.data?.message || 'Gönderi yüklenirken bir hata oluştu.'
+        const msg = err.response?.data?.message || 'Something went wrong while loading the post.'
         setFetchError(msg)
       } finally {
         setLoading(false)
@@ -32,10 +34,10 @@ const EditPostPage = () => {
   const handleSubmit = async (formData) => {
     try {
       await api.put(`/posts/${id}`, formData)
-      toast.success('Gönderi başarıyla güncellendi!')
+      toast.success('Post updated successfully!')
       navigate('/admin')
     } catch (err) {
-      const msg = err.response?.data?.message || 'Gönderi güncellenirken bir hata oluştu.'
+      const msg = err.response?.data?.message || 'Something went wrong while updating the post.'
       toast.error(msg)
     }
   }
@@ -53,7 +55,7 @@ const EditPostPage = () => {
           to="/admin"
           className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
         >
-          Admin Paneline Dön
+          Back to Admin Panel
         </Link>
       </div>
     )
@@ -65,13 +67,13 @@ const EditPostPage = () => {
         <Link
           to="/admin"
           className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
-          aria-label="Admin paneline dön"
+          aria-label="Back to admin panel"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Gönderiyi Düzenle</h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Edit Post</h1>
       </div>
 
       <PostForm

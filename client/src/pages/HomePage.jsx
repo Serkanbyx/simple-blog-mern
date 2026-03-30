@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import api from '../api/axios'
 import PostCard from '../components/PostCard'
+import SEO from '../components/SEO'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 const POSTS_PER_PAGE = 6
 const DEBOUNCE_DELAY = 300
@@ -53,11 +55,13 @@ const XIcon = (props) => (
 )
 
 const HomePage = () => {
+  useDocumentTitle(null)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [posts, setPosts] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [totalPosts, setTotalPosts] = useState(0)
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState(null)
@@ -112,9 +116,10 @@ const HomePage = () => {
 
         setPosts((prev) => (append ? [...prev, ...data.posts] : data.posts))
         setTotalPages(data.totalPages)
+        setTotalPosts(data.totalPosts)
         setPage(data.currentPage)
       } catch {
-        setError('Gönderiler yüklenirken bir hata oluştu.')
+        setError('Something went wrong while loading posts.')
       } finally {
         setLoading(false)
         setLoadingMore(false)
@@ -195,18 +200,20 @@ const HomePage = () => {
 
   return (
     <div>
+      <SEO description="Discover the latest articles on technology, software, and current topics." />
+
       {/* Hero section */}
       <section className="mb-8 text-center sm:mb-12">
-        <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:mb-3 sm:text-4xl lg:text-5xl">
+        <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900 sm:mb-3 sm:text-4xl lg:text-5xl dark:text-white">
           Blog
         </h1>
-        <p className="mx-auto max-w-2xl text-base text-gray-600 sm:text-lg">
-          Teknoloji, yazılım ve güncel konularda en yeni yazıları keşfedin.
+        <p className="mx-auto max-w-2xl text-base text-gray-600 sm:text-lg dark:text-gray-400">
+          Discover the latest articles on technology, software, and current topics.
         </p>
       </section>
 
       {/* Search & Filters */}
-      <section className="mb-8 space-y-4" aria-label="Arama ve filtreler">
+      <section className="mb-8 space-y-4" aria-label="Search and filters">
         {/* Search bar */}
         <div className="relative mx-auto max-w-xl">
           <span className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-gray-400">
@@ -216,15 +223,15 @@ const HomePage = () => {
             type="search"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Başlığa göre ara..."
-            aria-label="Başlığa göre ara"
-            className="w-full rounded-xl border border-gray-300 bg-white py-3 pr-10 pl-11 text-gray-800 shadow-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+            placeholder="Search by title..."
+            aria-label="Search by title"
+            className="w-full rounded-xl border border-gray-300 bg-white py-3 pr-10 pl-11 text-gray-800 shadow-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
           />
           {searchInput && (
             <button
               onClick={() => setSearchInput('')}
               className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition hover:text-gray-600"
-              aria-label="Aramayı temizle"
+              aria-label="Clear search"
             >
               <XIcon className="h-4 w-4" />
             </button>
@@ -234,7 +241,7 @@ const HomePage = () => {
         {/* Category filter */}
         {categories.length > 0 && (
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="mr-1 text-sm font-medium text-gray-500">Kategori:</span>
+            <span className="mr-1 text-sm font-medium text-gray-500">Category:</span>
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -254,7 +261,7 @@ const HomePage = () => {
         {/* Tag filter */}
         {tags.length > 0 && (
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="mr-1 text-sm font-medium text-gray-500">Etiket:</span>
+            <span className="mr-1 text-sm font-medium text-gray-500">Tag:</span>
             {tags.map((t) => (
               <button
                 key={t}
@@ -279,7 +286,7 @@ const HomePage = () => {
               className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
               <XIcon className="h-4 w-4" />
-              Filtreleri Temizle
+              Clear Filters
             </button>
           </div>
         )}
@@ -293,7 +300,7 @@ const HomePage = () => {
             onClick={() => fetchPosts(1)}
             className="mt-2 text-sm font-semibold text-red-600 underline hover:text-red-800"
           >
-            Tekrar dene
+            Try again
           </button>
         </div>
       )}
@@ -324,19 +331,19 @@ const HomePage = () => {
             />
           </svg>
           <h2 className="mb-2 text-xl font-semibold text-gray-700">
-            {hasActiveFilters ? 'Sonuç bulunamadı' : 'Henüz gönderi yok'}
+            {hasActiveFilters ? 'No results found' : 'No posts yet'}
           </h2>
           <p className="text-gray-500">
             {hasActiveFilters
-              ? 'Farklı anahtar kelime veya filtreler deneyin.'
-              : 'İlk gönderi yayınlandığında burada görünecek.'}
+              ? 'Try a different keyword or filters.'
+              : 'The first post will appear here once published.'}
           </p>
           {hasActiveFilters && (
             <button
               onClick={handleResetFilters}
               className="mt-4 text-sm font-semibold text-blue-600 underline hover:text-blue-800"
             >
-              Filtreleri Temizle
+              Clear Filters
             </button>
           )}
         </div>
@@ -345,6 +352,12 @@ const HomePage = () => {
       {/* Post grid */}
       {!loading && posts.length > 0 && (
         <>
+          {totalPosts > 0 && (
+            <p className="mb-4 text-sm text-gray-500">
+              {totalPosts} {totalPosts === 1 ? 'post' : 'posts'} found
+            </p>
+          )}
+
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <PostCard key={post._id} post={post} />
@@ -362,10 +375,10 @@ const HomePage = () => {
                 {loadingMore ? (
                   <>
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    Yükleniyor...
+                    Loading...
                   </>
                 ) : (
-                  'Daha Fazla Göster'
+                  'Load More'
                 )}
               </button>
             </div>

@@ -4,12 +4,17 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import api from '../api/axios'
 import createMarkdownComponents from '../utils/markdownComponents'
+import getReadingTime from '../utils/readingTime'
+import ShareButtons from '../components/ShareButtons'
+import SEO from '../components/SEO'
+import RelatedPosts from '../components/RelatedPosts'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 const PLACEHOLDER_IMAGE =
   'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1200&h=600&fit=crop'
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('tr-TR', {
+  return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -55,13 +60,13 @@ const NotFound = () => (
         d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
       />
     </svg>
-    <h2 className="mb-2 text-2xl font-bold text-gray-700">Gönderi bulunamadı</h2>
-    <p className="mb-6 text-gray-500">Aradığınız gönderi mevcut değil veya kaldırılmış olabilir.</p>
+    <h2 className="mb-2 text-2xl font-bold text-gray-700">Post not found</h2>
+    <p className="mb-6 text-gray-500">The post you&apos;re looking for doesn&apos;t exist or may have been removed.</p>
     <Link
       to="/"
       className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700"
     >
-      ← Ana Sayfaya Dön
+      &larr; Back to Home
     </Link>
   </div>
 )
@@ -70,6 +75,7 @@ const PostDetailPage = () => {
   const { slug } = useParams()
   const markdownComponents = useMemo(() => createMarkdownComponents('full'), [])
   const [post, setPost] = useState(null)
+  useDocumentTitle(post?.title || 'Loading...')
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [error, setError] = useState(null)
@@ -87,7 +93,7 @@ const PostDetailPage = () => {
         if (err.response?.status === 404 || err.response?.status === 400) {
           setNotFound(true)
         } else {
-          setError('Gönderi yüklenirken bir hata oluştu.')
+          setError('Something went wrong while loading the post.')
         }
       } finally {
         setLoading(false)
@@ -113,7 +119,7 @@ const PostDetailPage = () => {
           onClick={() => window.location.reload()}
           className="text-sm font-semibold text-blue-600 underline hover:text-blue-800"
         >
-          Tekrar dene
+          Try again
         </button>
       </div>
     )
@@ -123,6 +129,12 @@ const PostDetailPage = () => {
 
   return (
     <article>
+      <SEO
+        title={title}
+        description={post.excerpt}
+        image={image}
+        type="article"
+      />
       {/* Back link */}
       <Link
         to="/"
@@ -131,7 +143,7 @@ const PostDetailPage = () => {
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
         </svg>
-        Ana Sayfaya Dön
+        Back to Home
       </Link>
 
       {/* Featured image */}
@@ -150,12 +162,12 @@ const PostDetailPage = () => {
       {/* Content area */}
       <div className="mx-auto max-w-3xl">
         {/* Title */}
-        <h1 className="mb-4 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl">
+        <h1 className="mb-4 text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl lg:text-4xl dark:text-white">
           {title}
         </h1>
 
         {/* Meta */}
-        <div className="mb-8 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+        <div className="mb-8 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
               {author?.username?.charAt(0).toUpperCase() || '?'}
@@ -170,6 +182,9 @@ const PostDetailPage = () => {
           <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
             {category}
           </span>
+
+          <span className="text-gray-300">•</span>
+          <span>{getReadingTime(content)} min read</span>
         </div>
 
         {/* Tags */}
@@ -186,6 +201,11 @@ const PostDetailPage = () => {
           </div>
         )}
 
+        {/* Share buttons */}
+        <div className="mb-8">
+          <ShareButtons title={title} />
+        </div>
+
         {/* Divider */}
         <hr className="mb-8 border-gray-200" />
 
@@ -196,8 +216,11 @@ const PostDetailPage = () => {
           </ReactMarkdown>
         </div>
 
+        {/* Related posts */}
+        <RelatedPosts category={category} currentPostId={post._id} />
+
         {/* Bottom back link */}
-        <div className="mt-12 border-t border-gray-200 pt-8">
+        <div className="mt-12 border-t border-gray-200 pt-8 dark:border-gray-700">
           <Link
             to="/"
             className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -205,7 +228,7 @@ const PostDetailPage = () => {
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
             </svg>
-            Ana Sayfaya Dön
+            Back to Home
           </Link>
         </div>
       </div>

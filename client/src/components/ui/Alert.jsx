@@ -57,7 +57,7 @@ const Alert = ({
           type="button"
           onClick={onDismiss}
           className="shrink-0 rounded p-0.5 opacity-60 transition-opacity hover:opacity-100 focus:ring-2 focus:outline-none"
-          aria-label="Kapat"
+          aria-label="Close"
         >
           <svg
             className="h-4 w-4"

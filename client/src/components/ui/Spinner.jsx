@@ -13,7 +13,7 @@ const colorStyles = {
 const Spinner = ({
   size = 'md',
   color = 'primary',
-  label = 'Yükleniyor',
+  label = 'Loading',
   className = '',
 }) => {
   return (

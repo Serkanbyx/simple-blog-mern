@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/axios'
 import { useToast } from '../context/ToastContext'
+import { Modal } from '../components/ui'
+import useDocumentTitle from '../hooks/useDocumentTitle'
 
 const FETCH_LIMIT = 20
 
@@ -9,7 +11,7 @@ const PLACEHOLDER_IMAGE =
   'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=600&h=400&fit=crop'
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('tr-TR', {
+  return new Date(dateString).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -52,49 +54,9 @@ const SkeletonCard = () => (
   </div>
 )
 
-const DeleteModal = ({ postTitle, onConfirm, onCancel, deleting }) => (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-        <svg className="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-        </svg>
-      </div>
-
-      <h3 className="mb-2 text-lg font-semibold text-gray-900">Gönderiyi Sil</h3>
-      <p className="mb-6 text-sm text-gray-600">
-        <span className="font-medium text-gray-800">&quot;{postTitle}&quot;</span> gönderisini silmek
-        istediğinize emin misiniz? Bu işlem geri alınamaz.
-      </p>
-
-      <div className="flex justify-end gap-3">
-        <button
-          onClick={onCancel}
-          disabled={deleting}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
-        >
-          İptal
-        </button>
-        <button
-          onClick={onConfirm}
-          disabled={deleting}
-          className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-60"
-        >
-          {deleting ? (
-            <>
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-              Siliniyor...
-            </>
-          ) : (
-            'Evet, Sil'
-          )}
-        </button>
-      </div>
-    </div>
-  </div>
-)
 
 const AdminDashboard = () => {
+  useDocumentTitle('Admin Dashboard')
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -122,7 +84,7 @@ const AdminDashboard = () => {
 
       setPosts(allPosts)
     } catch {
-      setError('Gönderiler yüklenirken bir hata oluştu.')
+      setError('Something went wrong while loading posts.')
     } finally {
       setLoading(false)
     }
@@ -148,10 +110,10 @@ const AdminDashboard = () => {
       setDeleting(true)
       await api.delete(`/posts/${deleteTarget._id}`)
       setPosts((prev) => prev.filter((p) => p._id !== deleteTarget._id))
-      toast.success('Gönderi başarıyla silindi!')
+      toast.success('Post deleted successfully!')
       setDeleteTarget(null)
     } catch {
-      toast.error('Gönderi silinirken bir hata oluştu.')
+      toast.error('Something went wrong while deleting the post.')
     } finally {
       setDeleting(false)
     }
@@ -165,7 +127,7 @@ const AdminDashboard = () => {
     <div>
       {/* Header */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Admin Dashboard</h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white">Admin Dashboard</h1>
         <Link
           to="/admin/posts/new"
           className="inline-flex items-center gap-2 self-start rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -173,7 +135,7 @@ const AdminDashboard = () => {
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          Yeni Gönderi
+          New Post
         </Link>
       </div>
 
@@ -188,7 +150,7 @@ const AdminDashboard = () => {
                 </svg>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Toplam Gönderi</p>
+                <p className="text-sm text-gray-500">Total Posts</p>
                 <p className="text-2xl font-bold text-gray-900">{posts.length}</p>
               </div>
             </div>
@@ -203,7 +165,7 @@ const AdminDashboard = () => {
                 </svg>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Kategori</p>
+                <p className="text-sm text-gray-500">Categories</p>
                 <p className="text-2xl font-bold text-gray-900">{uniqueCategories.length}</p>
               </div>
             </div>
@@ -219,7 +181,7 @@ const AdminDashboard = () => {
             onClick={fetchAllPosts}
             className="mt-2 text-sm font-semibold text-red-600 underline hover:text-red-800"
           >
-            Tekrar dene
+            Try again
           </button>
         </div>
       )}
@@ -232,11 +194,11 @@ const AdminDashboard = () => {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Görsel</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Başlık</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Kategori</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Tarih</th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">İşlemler</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Image</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Title</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Category</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -272,8 +234,8 @@ const AdminDashboard = () => {
               d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
             />
           </svg>
-          <h2 className="mb-2 text-xl font-semibold text-gray-700">Henüz gönderi yok</h2>
-          <p className="mb-6 text-gray-500">İlk gönderinizi oluşturarak başlayın.</p>
+          <h2 className="mb-2 text-xl font-semibold text-gray-700">No posts yet</h2>
+          <p className="mb-6 text-gray-500">Create your first post to get started.</p>
           <Link
             to="/admin/posts/new"
             className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700"
@@ -281,7 +243,7 @@ const AdminDashboard = () => {
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Yeni Gönderi Oluştur
+            Create New Post
           </Link>
         </div>
       )}
@@ -292,11 +254,11 @@ const AdminDashboard = () => {
           <table className="w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Görsel</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Başlık</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Kategori</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Tarih</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">İşlemler</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Image</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Title</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Category</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Date</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -328,13 +290,13 @@ const AdminDashboard = () => {
                         to={`/admin/posts/${post._id}`}
                         className="rounded-lg border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-700 transition-colors hover:bg-gray-100"
                       >
-                        Düzenle
+                        Edit
                       </Link>
                       <button
                         onClick={() => handleDeleteClick(post)}
                         className="rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
                       >
-                        Sil
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -375,13 +337,13 @@ const AdminDashboard = () => {
                   to={`/admin/posts/${post._id}`}
                   className="flex-1 rounded-lg border border-gray-200 py-2 text-center text-xs font-medium text-gray-700 transition-colors hover:bg-gray-100"
                 >
-                  Düzenle
+                  Edit
                 </Link>
                 <button
                   onClick={() => handleDeleteClick(post)}
                   className="flex-1 rounded-lg border border-red-200 py-2 text-center text-xs font-medium text-red-600 transition-colors hover:bg-red-50"
                 >
-                  Sil
+                  Delete
                 </button>
               </div>
             </div>
@@ -390,14 +352,17 @@ const AdminDashboard = () => {
       )}
 
       {/* Delete confirmation modal */}
-      {deleteTarget && (
-        <DeleteModal
-          postTitle={deleteTarget.title}
-          onConfirm={handleDeleteConfirm}
-          onCancel={handleDeleteCancel}
-          deleting={deleting}
-        />
-      )}
+      <Modal
+        open={!!deleteTarget}
+        title="Delete Post"
+        message={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+        confirmLabel={deleting ? 'Deleting...' : 'Yes, Delete'}
+        cancelLabel="Cancel"
+        variant="danger"
+        loading={deleting}
+        onConfirm={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      />
     </div>
   )
 }
