@@ -69,7 +69,7 @@ const postSchema = new Schema({
 });
 
 // Generate slug & excerpt before saving
-postSchema.pre("save", function () {
+postSchema.pre("validate", function () {
   if (this.isModified("title")) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }

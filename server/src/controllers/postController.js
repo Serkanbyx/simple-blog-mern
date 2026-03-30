@@ -150,6 +150,7 @@ const createPost = async (req, res) => {
 
     res.status(201).json(populated);
   } catch (error) {
+    console.error('[CREATE POST ERROR]', error.name, error.message, error.stack);
     if (error.name === 'ValidationError') {
       const firstMessage = Object.values(error.errors)[0]?.message;
       return res.status(400).json({ message: firstMessage || 'Validation error.' });
