@@ -69,7 +69,7 @@ const postSchema = new Schema({
 });
 
 // Generate slug & excerpt before saving
-postSchema.pre("save", function (next) {
+postSchema.pre("save", function () {
   if (this.isModified("title")) {
     this.slug = slugify(this.title, { lower: true, strict: true });
   }
@@ -84,8 +84,6 @@ postSchema.pre("save", function (next) {
   if (!this.isNew) {
     this.updatedAt = Date.now();
   }
-
-  next();
 });
 
 // Compound indexes for query performance

@@ -16,6 +16,8 @@ const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+app.set('trust proxy', 1);
+
 // Security middleware stack (order matters)
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
