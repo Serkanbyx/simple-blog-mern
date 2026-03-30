@@ -138,8 +138,10 @@ const createPost = async (req, res) => {
     } catch (err) {
       if (err.code === 11000 && err.keyPattern?.slug) {
         const suffix = crypto.randomBytes(3).toString('hex');
-        postData.slug = slugify(postData.title, { lower: true, strict: true }) + '-' + suffix;
-        post = await Post.create(postData);
+        const retryDoc = new Post(postData);
+        retryDoc.slug = slugify(postData.title, { lower: true, strict: true }) + '-' + suffix;
+        retryDoc._skipSlugGeneration = true;
+        post = await retryDoc.save();
       } else {
         throw err;
       }

@@ -2192,11 +2192,18 @@ async function seed() {
     }
 
     if (!admin) {
+      const seedPassword = process.env.SEED_ADMIN_PASSWORD;
+
+      if (!seedPassword) {
+        console.error("SEED_ADMIN_PASSWORD is not set in .env — aborting.");
+        process.exit(1);
+      }
+
       console.log("No admin user found. Creating seed admin...");
       admin = await User.create({
         username: "adminuser",
         email: process.env.ADMIN_EMAIL || "admin@example.com",
-        password: "Admin1234",
+        password: seedPassword,
         role: "admin",
       });
       console.log(`Admin created: ${admin.username} (${admin.email})`);

@@ -35,18 +35,6 @@ A full-stack blog application built with the **MERN** stack (MongoDB, Express, R
 
 ---
 
-## Screenshots
-
-| Page | Screenshot |
-|---|---|
-| Home | ![Home Page](screenshots/home.png) |
-| Post Detail | ![Post Detail](screenshots/post-detail.png) |
-| Admin Dashboard | ![Admin Dashboard](screenshots/admin-dashboard.png) |
-| Create Post | ![Create Post](screenshots/create-post.png) |
-| Login | ![Login](screenshots/login.png) |
-
----
-
 ## Technologies
 
 ### Frontend
@@ -108,6 +96,7 @@ PORT=5000
 MONGO_URI=mongodb://localhost:27017/simple-blog
 JWT_SECRET=replace_with_a_strong_random_string
 ADMIN_EMAIL=admin@example.com
+SEED_ADMIN_PASSWORD=replace_with_a_strong_admin_password
 CLIENT_URL=http://localhost:5173
 NODE_ENV=development
 CLOUDINARY_CLOUD_NAME=your_cloud_name
@@ -121,6 +110,7 @@ CLOUDINARY_API_SECRET=your_api_secret
 | `MONGO_URI` | MongoDB connection string (Atlas or local) |
 | `JWT_SECRET` | Secret key for signing JWT tokens |
 | `ADMIN_EMAIL` | Email address that receives admin role on registration |
+| `SEED_ADMIN_PASSWORD` | Password for the auto-created admin user during seeding |
 | `CLIENT_URL` | Frontend URL for CORS whitelist |
 | `NODE_ENV` | Environment mode (`development` or `production`) |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary account cloud name |
@@ -375,6 +365,7 @@ simple-blog-mern/
 | `MONGO_URI` | Your MongoDB Atlas connection string |
 | `JWT_SECRET` | A strong random string |
 | `ADMIN_EMAIL` | Your admin email address |
+| `SEED_ADMIN_PASSWORD` | A strong password for the seed admin user |
 | `CLIENT_URL` | Your Netlify URL (e.g., `https://simple-blog-mernn.netlify.app`) |
 | `NODE_ENV` | `production` |
 | `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name |
@@ -428,10 +419,8 @@ simple-blog-mern/
 - 🔮 [ ] Comment system with nested replies
 - 🔮 [ ] Like / bookmark posts
 - 🔮 [ ] User profile pages
-- 🔮 [ ] Dark mode toggle
 - 🔮 [ ] RSS feed generation
 - 🔮 [ ] Post view count analytics
-- 🔮 [ ] Social media sharing buttons
 - 🔮 [ ] Email notification on new posts
 
 ---
