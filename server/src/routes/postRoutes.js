@@ -3,6 +3,7 @@ const {
   getAllPosts,
   getPostBySlug,
   getPostById,
+  getFilterOptions,
   createPost,
   updatePost,
   deletePost,
@@ -13,6 +14,7 @@ const requireAdmin = require('../middlewares/requireAdmin');
 const router = express.Router();
 
 router.get('/', getAllPosts);
+router.get('/filters', getFilterOptions);
 router.get('/id/:id', verifyToken, requireAdmin, getPostById);
 router.get('/:slug', getPostBySlug);
 router.post('/', verifyToken, requireAdmin, createPost);

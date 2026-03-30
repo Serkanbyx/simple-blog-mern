@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import api from '../api/axios'
 import PostCard from '../components/PostCard'
 
 const POSTS_PER_PAGE = 6
+const DEBOUNCE_DELAY = 300
 
 const SkeletonCard = () => (
   <div className="animate-pulse overflow-hidden rounded-xl bg-white shadow-sm">
@@ -20,7 +22,39 @@ const SkeletonCard = () => (
   </div>
 )
 
+const SearchIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+    />
+  </svg>
+)
+
+const XIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={2}
+    stroke="currentColor"
+    {...props}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+  </svg>
+)
+
 const HomePage = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [posts, setPosts] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -28,33 +62,128 @@ const HomePage = () => {
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState(null)
 
-  const fetchPosts = useCallback(async (pageNum, append = false) => {
-    try {
-      if (append) {
-        setLoadingMore(true)
-      } else {
-        setLoading(true)
+  // Filter options from backend
+  const [categories, setCategories] = useState([])
+  const [tags, setTags] = useState([])
+
+  // Active filters — sourced from URL
+  const activeSearch = searchParams.get('search') || ''
+  const activeCategory = searchParams.get('category') || ''
+  const activeTag = searchParams.get('tag') || ''
+
+  // Local search input (for debouncing)
+  const [searchInput, setSearchInput] = useState(activeSearch)
+  const debounceRef = useRef(null)
+  const isFirstRender = useRef(true)
+
+  const hasActiveFilters = activeSearch || activeCategory || activeTag
+
+  // ----- Fetch filter options on mount -----
+  useEffect(() => {
+    const fetchFilterOptions = async () => {
+      try {
+        const { data } = await api.get('/posts/filters')
+        setCategories(data.categories)
+        setTags(data.tags)
+      } catch {
+        // Filters are non-critical; silently ignore
       }
-      setError(null)
-
-      const { data } = await api.get('/posts', {
-        params: { page: pageNum, limit: POSTS_PER_PAGE },
-      })
-
-      setPosts((prev) => (append ? [...prev, ...data.posts] : data.posts))
-      setTotalPages(data.totalPages)
-      setPage(data.currentPage)
-    } catch {
-      setError('Gönderiler yüklenirken bir hata oluştu.')
-    } finally {
-      setLoading(false)
-      setLoadingMore(false)
     }
+    fetchFilterOptions()
   }, [])
+
+  // ----- Fetch posts whenever URL params change -----
+  const fetchPosts = useCallback(
+    async (pageNum, append = false) => {
+      try {
+        if (append) {
+          setLoadingMore(true)
+        } else {
+          setLoading(true)
+        }
+        setError(null)
+
+        const params = { page: pageNum, limit: POSTS_PER_PAGE }
+        if (activeSearch) params.search = activeSearch
+        if (activeCategory) params.category = activeCategory
+        if (activeTag) params.tag = activeTag
+
+        const { data } = await api.get('/posts', { params })
+
+        setPosts((prev) => (append ? [...prev, ...data.posts] : data.posts))
+        setTotalPages(data.totalPages)
+        setPage(data.currentPage)
+      } catch {
+        setError('Gönderiler yüklenirken bir hata oluştu.')
+      } finally {
+        setLoading(false)
+        setLoadingMore(false)
+      }
+    },
+    [activeSearch, activeCategory, activeTag],
+  )
 
   useEffect(() => {
     fetchPosts(1)
   }, [fetchPosts])
+
+  // Sync local search input when URL changes externally (e.g. browser back/forward)
+  useEffect(() => {
+    setSearchInput(activeSearch)
+  }, [activeSearch])
+
+  // ----- Debounced search -----
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
+    clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev)
+        if (searchInput.trim()) {
+          next.set('search', searchInput.trim())
+        } else {
+          next.delete('search')
+        }
+        return next
+      })
+    }, DEBOUNCE_DELAY)
+
+    return () => clearTimeout(debounceRef.current)
+  }, [searchInput, setSearchParams])
+
+  // ----- Filter handlers -----
+  const handleCategoryChange = (category) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      if (category && category !== activeCategory) {
+        next.set('category', category)
+      } else {
+        next.delete('category')
+      }
+      return next
+    })
+  }
+
+  const handleTagChange = (tag) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      if (tag && tag !== activeTag) {
+        next.set('tag', tag)
+      } else {
+        next.delete('tag')
+      }
+      return next
+    })
+  }
+
+  const handleResetFilters = () => {
+    setSearchInput('')
+    setSearchParams({})
+  }
 
   const handleLoadMore = () => {
     if (page < totalPages && !loadingMore) {
@@ -74,6 +203,86 @@ const HomePage = () => {
         <p className="mx-auto max-w-2xl text-base text-gray-600 sm:text-lg">
           Teknoloji, yazılım ve güncel konularda en yeni yazıları keşfedin.
         </p>
+      </section>
+
+      {/* Search & Filters */}
+      <section className="mb-8 space-y-4" aria-label="Arama ve filtreler">
+        {/* Search bar */}
+        <div className="relative mx-auto max-w-xl">
+          <span className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-gray-400">
+            <SearchIcon className="h-5 w-5" aria-hidden="true" />
+          </span>
+          <input
+            type="search"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Başlığa göre ara..."
+            aria-label="Başlığa göre ara"
+            className="w-full rounded-xl border border-gray-300 bg-white py-3 pr-10 pl-11 text-gray-800 shadow-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+          />
+          {searchInput && (
+            <button
+              onClick={() => setSearchInput('')}
+              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition hover:text-gray-600"
+              aria-label="Aramayı temizle"
+            >
+              <XIcon className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {/* Category filter */}
+        {categories.length > 0 && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="mr-1 text-sm font-medium text-gray-500">Kategori:</span>
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryChange(cat)}
+                className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition ${
+                  activeCategory === cat
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Tag filter */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="mr-1 text-sm font-medium text-gray-500">Etiket:</span>
+            {tags.map((t) => (
+              <button
+                key={t}
+                onClick={() => handleTagChange(t)}
+                className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                  activeTag === t
+                    ? 'border-blue-600 bg-blue-50 text-blue-700'
+                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                #{t}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Reset filters */}
+        {hasActiveFilters && (
+          <div className="text-center">
+            <button
+              onClick={handleResetFilters}
+              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
+            >
+              <XIcon className="h-4 w-4" />
+              Filtreleri Temizle
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Error state */}
@@ -114,8 +323,22 @@ const HomePage = () => {
               d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
             />
           </svg>
-          <h2 className="mb-2 text-xl font-semibold text-gray-700">Henüz gönderi yok</h2>
-          <p className="text-gray-500">İlk gönderi yayınlandığında burada görünecek.</p>
+          <h2 className="mb-2 text-xl font-semibold text-gray-700">
+            {hasActiveFilters ? 'Sonuç bulunamadı' : 'Henüz gönderi yok'}
+          </h2>
+          <p className="text-gray-500">
+            {hasActiveFilters
+              ? 'Farklı anahtar kelime veya filtreler deneyin.'
+              : 'İlk gönderi yayınlandığında burada görünecek.'}
+          </p>
+          {hasActiveFilters && (
+            <button
+              onClick={handleResetFilters}
+              className="mt-4 text-sm font-semibold text-blue-600 underline hover:text-blue-800"
+            >
+              Filtreleri Temizle
+            </button>
+          )}
         </div>
       )}
 

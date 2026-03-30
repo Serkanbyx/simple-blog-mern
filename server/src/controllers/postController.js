@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const crypto = require('crypto');
 const Post = require('../models/Post');
+const escapeRegex = require('../utils/escapeRegex');
 
 const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DEFAULT_PAGE = 1;
@@ -32,7 +33,7 @@ const getAllPosts = async (req, res) => {
     }
 
     if (search) {
-      filter.title = { $regex: search.trim(), $options: 'i' };
+      filter.title = { $regex: escapeRegex(search.trim()), $options: 'i' };
     }
 
     const skip = (page - 1) * limit;
@@ -238,4 +239,21 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { getAllPosts, getPostBySlug, getPostById, createPost, updatePost, deletePost };
+// GET /api/posts/filters — distinct categories & tags for filter UI
+const getFilterOptions = async (_req, res) => {
+  try {
+    const [categories, tags] = await Promise.all([
+      Post.distinct('category'),
+      Post.distinct('tags'),
+    ]);
+
+    res.json({
+      categories: categories.filter(Boolean).sort(),
+      tags: tags.filter(Boolean).sort(),
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error.' });
+  }
+};
+
+module.exports = { getAllPosts, getPostBySlug, getPostById, createPost, updatePost, deletePost, getFilterOptions };
