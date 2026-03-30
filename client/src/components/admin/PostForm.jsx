@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import api from '../../api/axios'
+import createMarkdownComponents from '../../utils/markdownComponents'
 
 const ACCEPTED_FORMATS = '.jpg,.jpeg,.png,.webp'
 const MAX_FILE_SIZE_MB = 5
@@ -29,79 +30,8 @@ const slugify = (text) =>
     .replace(/^-+/, '')
     .replace(/-+$/, '')
 
-const markdownComponents = {
-  h1: ({ children }) => (
-    <h1 className="mt-6 mb-3 text-2xl font-extrabold text-gray-900">{children}</h1>
-  ),
-  h2: ({ children }) => (
-    <h2 className="mt-5 mb-2 text-xl font-bold text-gray-900">{children}</h2>
-  ),
-  h3: ({ children }) => (
-    <h3 className="mt-4 mb-2 text-lg font-semibold text-gray-900">{children}</h3>
-  ),
-  p: ({ children }) => (
-    <p className="mb-3 leading-relaxed text-gray-700">{children}</p>
-  ),
-  a: ({ href, children }) => (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="font-medium text-blue-600 underline decoration-blue-300 underline-offset-2 hover:text-blue-800"
-    >
-      {children}
-    </a>
-  ),
-  ul: ({ children }) => (
-    <ul className="mb-3 ml-6 list-disc space-y-1 text-gray-700">{children}</ul>
-  ),
-  ol: ({ children }) => (
-    <ol className="mb-3 ml-6 list-decimal space-y-1 text-gray-700">{children}</ol>
-  ),
-  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-  blockquote: ({ children }) => (
-    <blockquote className="my-3 border-l-4 border-blue-400 bg-blue-50 py-2 pr-4 pl-4 italic text-gray-700">
-      {children}
-    </blockquote>
-  ),
-  code: ({ inline, className, children }) => {
-    if (inline) {
-      return (
-        <code className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm text-pink-600">
-          {children}
-        </code>
-      )
-    }
-    return (
-      <pre className="my-3 overflow-x-auto rounded-lg bg-gray-900 p-4">
-        <code className={`font-mono text-sm text-gray-100 ${className || ''}`}>
-          {children}
-        </code>
-      </pre>
-    )
-  },
-  pre: ({ children }) => <>{children}</>,
-  img: ({ src, alt }) => (
-    <img src={src} alt={alt || ''} loading="lazy" className="my-4 w-full rounded-lg shadow-sm" />
-  ),
-  hr: () => <hr className="my-6 border-gray-200" />,
-  table: ({ children }) => (
-    <div className="my-3 overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200 border border-gray-200 text-sm">
-        {children}
-      </table>
-    </div>
-  ),
-  thead: ({ children }) => <thead className="bg-gray-50">{children}</thead>,
-  th: ({ children }) => (
-    <th className="px-4 py-2 text-left font-semibold text-gray-700">{children}</th>
-  ),
-  td: ({ children }) => (
-    <td className="border-t border-gray-200 px-4 py-2 text-gray-600">{children}</td>
-  ),
-}
-
 const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = false }) => {
+  const markdownComponents = useMemo(() => createMarkdownComponents('compact'), [])
   const [title, setTitle] = useState('')
   const [category, setCategory] = useState('')
   const [customCategory, setCustomCategory] = useState('')
