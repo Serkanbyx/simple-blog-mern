@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../api/axios'
 import { useToast } from '../context/ToastContext'
@@ -132,7 +132,10 @@ const AdminDashboard = () => {
     fetchAllPosts()
   }, [fetchAllPosts])
 
-  const uniqueCategories = [...new Set(posts.map((p) => p.category))]
+  const uniqueCategories = useMemo(
+    () => [...new Set(posts.map((p) => p.category))],
+    [posts],
+  )
 
   const handleDeleteClick = (post) => {
     setDeleteTarget(post)
