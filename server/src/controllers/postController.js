@@ -1,9 +1,8 @@
-const fs = require('fs');
-const path = require('path');
 const mongoose = require('mongoose');
 const slugify = require('slugify');
 const crypto = require('crypto');
 const Post = require('../models/Post');
+const cloudinary = require('../config/cloudinary');
 const escapeRegex = require('../utils/escapeRegex');
 
 const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -229,9 +228,9 @@ const deletePost = async (req, res) => {
       return res.status(404).json({ message: 'Post not found.' });
     }
 
-    if (post.image) {
-      const imagePath = path.join(__dirname, '..', '..', 'uploads', path.basename(post.image));
-      fs.unlink(imagePath, () => {});
+    if (post.image && post.image.includes('cloudinary')) {
+      const publicId = post.image.split('/').slice(-2).join('/').split('.')[0];
+      cloudinary.uploader.destroy(publicId).catch(() => {});
     }
 
     res.json({ message: 'Post deleted successfully.' });
