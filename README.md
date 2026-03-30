@@ -466,11 +466,11 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Developer
 
-**Serkan Bayraktar**
+**Serkanby**
 
-- 🌐 [serkanbayraktar.com](https://serkanbayraktar.com/)
-- 🐙 [GitHub — @Serkanbyx](https://github.com/Serkanbyx)
-- 📧 [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
+- Website: [serkanbayraktar.com](https://serkanbayraktar.com/)
+- GitHub: [@Serkanbyx](https://github.com/Serkanbyx)
+- Email: [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
 
 ---
 
@@ -489,9 +489,9 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-- 🐛 [Open an Issue](https://github.com/Serkanbyx/simple-blog-mern/issues)
-- 📧 [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
-- 🌐 [serkanbayraktar.com](https://serkanbayraktar.com/)
+- [Open an Issue](https://github.com/Serkanbyx/simple-blog-mern/issues)
+- Email: [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
+- Website: [serkanbayraktar.com](https://serkanbayraktar.com/)
 
 ---
 
