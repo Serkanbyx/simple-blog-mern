@@ -1,9 +1,33 @@
-# 📝 Simple Blog MERN
+<div align="center">
+  <p>
+    <strong>📝 Simple Blog MERN</strong>
+  </p>
 
-A full-stack blog application built with the **MERN** stack (MongoDB, Express, React, Node.js). Features a modern, responsive UI with Markdown-powered content, role-based admin dashboard, Cloudinary image uploads, category & tag filtering, and production-ready security hardening.
+  <h1>Simple Blog MERN</h1>
 
-[![Created by Serkanby](https://img.shields.io/badge/Created%20by-Serkanby-blue?style=flat-square)](https://serkanbayraktar.com/)
-[![GitHub](https://img.shields.io/badge/GitHub-Serkanbyx-181717?style=flat-square&logo=github)](https://github.com/Serkanbyx)
+  <p><em>A full-stack blog application with JWT authentication, a role-based admin dashboard, Markdown-powered content, Cloudinary image uploads, and a security-hardened MERN architecture.</em></p>
+
+  <p>
+    <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License" />
+    <img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen?style=flat-square&logo=node.js&logoColor=white" alt="Node.js version" />
+    <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React 19" />
+    <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8" />
+    <img src="https://img.shields.io/badge/Express-5-000000?style=flat-square&logo=express&logoColor=white" alt="Express 5" />
+    <img src="https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB Atlas" />
+    <img src="https://img.shields.io/badge/Tailwind-v4-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" />
+    <img src="https://img.shields.io/badge/API-Render-46E3B7?style=flat-square&logo=render&logoColor=white" alt="API on Render" />
+    <img src="https://img.shields.io/badge/Web-Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white" alt="Web on Netlify" />
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square" alt="PRs welcome" />
+  </p>
+
+  <p>
+    <a href="https://simple-blog-mernn.netlify.app/">Live Demo</a> •
+    <a href="#features">Features</a> •
+    <a href="#installation">Quick Start</a> •
+    <a href="#api-endpoints">API Docs</a> •
+    <a href="#architecture">Architecture</a>
+  </p>
+</div>
 
 ---
 
@@ -11,7 +35,12 @@ A full-stack blog application built with the **MERN** stack (MongoDB, Express, R
 
 - **Public Blog** — Browse posts, read full articles with rich Markdown rendering and syntax-highlighted code blocks
 - **SEO-Friendly Slugs** — Auto-generated URL slugs from post titles for clean, shareable URLs
+- **SEO Meta Tags** — Per-page `<title>`, description, and Open Graph tags via `react-helmet-async`
 - **Markdown Support** — Full GFM (GitHub Flavored Markdown) with tables, task lists, blockquotes, and fenced code blocks
+- **Dark Mode** — System-aware light/dark theme toggle persisted in `localStorage` via a theme context
+- **Reading Time** — Auto-calculated reading time per post (≈238 words/min) shown in listings and detail view
+- **Related Posts** — Suggested posts by shared category/tags on the post detail page
+- **Share Buttons** — Quick social sharing (and copy-link) on each article
 - **Admin Dashboard** — Create, edit, delete, and manage blog posts from a dedicated panel with table/card views
 - **Cloudinary Image Uploads** — Upload cover images for posts via Multer + Cloudinary integration (JPEG, PNG, WebP — 5 MB limit)
 - **Category & Tag System** — Organize posts with categories and tags; filter and search on the homepage
@@ -20,11 +49,13 @@ A full-stack blog application built with the **MERN** stack (MongoDB, Express, R
 - **Debounced Search** — Real-time search with debounce for optimal performance and fewer API calls
 - **Paginated Listing** — Load-more pagination for the post feed with query parameter support
 - **Rate Limiting** — General API limiter (100 req/15 min) + stricter auth limiter (20 req/15 min)
-- **Security Hardened** — Helmet, CORS whitelist, request size limits, bcrypt password hashing
+- **Security Hardened** — Helmet, CORS whitelist, request size limits, bcrypt password hashing, request body & query type validation
 - **Lazy Loading** — React.lazy + Suspense for optimized page loading with spinner fallback
 - **Responsive UI** — Mobile-first design with Tailwind CSS 4
 - **Reusable UI Kit** — Button, Input, Modal, Alert, Badge, Skeleton, Spinner, Toast components
 - **Toast Notifications** — Auto-dismissing success, error, and info notifications via context
+- **Custom 404 Page** — Friendly not-found page for unmatched routes
+- **Scroll Helpers** — Scroll-to-top on route change and a floating back-to-top button
 - **Health Check** — `/api/health` endpoint for uptime monitoring
 
 ---
@@ -32,6 +63,52 @@ A full-stack blog application built with the **MERN** stack (MongoDB, Express, R
 ## Live Demo
 
 [🚀 View Live Demo](https://simple-blog-mernn.netlify.app/)
+
+---
+
+## Architecture
+
+A high-level visual map of the system. Both diagrams render natively on GitHub thanks to Mermaid support.
+
+### Domain Model
+
+How the core data relates. `User` and `Post` are MongoDB collections; categories and tags are stored on each post and surfaced as filter facets through aggregation.
+
+```mermaid
+graph LR
+  User(("User"))
+  Post(["Post"])
+  Category{{"Category"}}
+  Tag{{"Tag"}}
+  Cloudinary[("Cloudinary")]
+
+  User -- "authors" --> Post
+  Post -- "categorized by" --> Category
+  Post -- "tagged with" --> Tag
+  Post -- "cover image stored in" --> Cloudinary
+  Category -. "aggregated as facet" .-> Post
+  Tag -. "aggregated as facet" .-> Post
+```
+
+### Request Lifecycle
+
+How a single browser action travels through the stack, from the SPA to the database.
+
+```mermaid
+flowchart LR
+  Browser["React 19 SPA<br/>(Vite + Tailwind)"]
+  API["Express 5 API<br/>(REST + JWT)"]
+  MW["Middleware<br/>(helmet, cors, rateLimit,<br/>verifyToken, requireAdmin)"]
+  DB[("MongoDB<br/>Mongoose 9")]
+  CDN[("Cloudinary<br/>images")]
+
+  Browser -- "Axios + JWT (Bearer)" --> API
+  API --> MW
+  MW --> DB
+  API -- "base64 stream upload" --> CDN
+  CDN -. "secure_url" .-> API
+  API -. "JSON response" .-> Browser
+```
 
 ---
 
@@ -44,6 +121,7 @@ A full-stack blog application built with the **MERN** stack (MongoDB, Express, R
 - **Tailwind CSS 4**: Utility-first CSS framework for rapid, responsive styling
 - **React Router 7**: Declarative client-side routing with lazy-loaded pages
 - **Axios 1**: Promise-based HTTP client with request/response interceptors
+- **react-helmet-async 3**: Declarative document head management for SEO meta tags
 - **react-markdown 10**: Markdown-to-React component renderer
 - **remark-gfm 4**: GitHub Flavored Markdown plugin (tables, task lists, strikethrough)
 - **react-syntax-highlighter 16**: Prism-based code block syntax highlighting with line numbers
@@ -78,7 +156,7 @@ A full-stack blog application built with the **MERN** stack (MongoDB, Express, R
 **1. Clone the repository:**
 
 ```bash
-git clone https://github.com/Serkanbyx/simple-blog-mern.git
+git clone https://github.com/serkanbyx/simple-blog-mern.git
 cd simple-blog-mern
 ```
 
@@ -134,7 +212,13 @@ cd server && npm install
 cd ../client && npm install
 ```
 
-**4. Run the application:**
+**4. Seed the database (optional — creates an admin user and demo posts):**
+
+```bash
+cd server && node src/seed.js
+```
+
+**5. Run the application:**
 
 ```bash
 # Terminal 1 — Backend
@@ -153,12 +237,13 @@ The client runs at `http://localhost:5173` and the API at `http://localhost:5000
 1. **Browse Posts** — Visit the homepage to see all published blog posts with cover images, categories, and tags
 2. **Search & Filter** — Use the search bar or click on categories and tags to filter posts
 3. **Read a Post** — Click any post card to view the full article with rich Markdown rendering
-4. **Register** — Create a new account from the Register page
-5. **Login** — Sign in with your credentials to access authenticated features
-6. **Admin Access** — If your email matches `ADMIN_EMAIL`, you automatically get admin privileges
-7. **Create Posts** — Navigate to the Admin Dashboard and create new blog posts with Markdown content and cover images
-8. **Edit & Delete** — Manage existing posts from the Admin Dashboard with edit and delete actions
-9. **Logout** — Sign out from the navigation bar
+4. **Toggle Theme** — Switch between light and dark mode from the navigation bar
+5. **Register** — Create a new account from the Register page
+6. **Login** — Sign in with your credentials to access authenticated features
+7. **Admin Access** — If your email matches `ADMIN_EMAIL`, you automatically get admin privileges
+8. **Create Posts** — Navigate to the Admin Dashboard and create new blog posts with Markdown content and cover images
+9. **Edit & Delete** — Manage existing posts from the Admin Dashboard with edit and delete actions
+10. **Logout** — Sign out from the navigation bar
 
 ---
 
@@ -170,7 +255,7 @@ The application uses JWT-based stateless authentication. On register or login, t
 
 ```javascript
 // Axios request interceptor — auto-attaches Bearer token
-instance.interceptors.request.use((config) => {
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -188,11 +273,11 @@ Admin access is controlled via the `ADMIN_EMAIL` environment variable. When a us
 ### Data Flow
 
 1. **Client** sends requests to the Express API via Axios (base URL from `VITE_API_URL`)
-2. **Express** validates the request through middleware (rate limiter → auth → admin check)
-3. **Controllers** process business logic and interact with **Mongoose models**
+2. **Express** validates the request through middleware (rate limiter → token verification → admin check)
+3. **Controllers** process business logic, validate input types, and interact with **Mongoose models**
 4. **MongoDB** stores and retrieves data (posts with slugs, categories, tags; users with hashed passwords)
 5. **Cloudinary** handles image storage; upload URLs are saved in post documents
-6. **Response** flows back through the error handler middleware for consistent error formatting
+6. **Response** flows back through the centralized error handler middleware for consistent error formatting
 
 ### Markdown Rendering
 
@@ -215,7 +300,7 @@ Post content is written in Markdown and rendered on the client using `react-mark
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
 | `GET` | `/api/posts` | No | List all posts (pagination, search, category, tag filters) |
-| `GET` | `/api/posts/filters` | No | Get available filter options (categories, tags with counts) |
+| `GET` | `/api/posts/filters` | No | Get available filter options (categories, tags) |
 | `GET` | `/api/posts/:slug` | No | Get a single post by slug |
 | `GET` | `/api/posts/id/:id` | Yes (Admin) | Get a single post by ID (admin editing) |
 | `POST` | `/api/posts` | Yes (Admin) | Create a new post |
@@ -249,84 +334,71 @@ Post content is written in Markdown and rendered on the client using `react-mark
 
 ## Project Structure
 
+A clean monorepo layout with an explicit backend / frontend split. Each panel below is collapsible — expand the one you care about.
+
+<details open>
+<summary><b>Server</b> — Express 5 API</summary>
+
+```
+server/
+├── src/
+│   ├── config/          # cloudinary, db connection, multer upload
+│   ├── controllers/     # auth, post, category handlers
+│   ├── middlewares/     # verifyToken, requireAdmin, errorHandler
+│   ├── models/          # Mongoose schemas (User, Post)
+│   ├── routes/          # auth, post, category, upload routers
+│   ├── utils/           # generateToken, escapeRegex, validateObjectId
+│   ├── seed.js          # admin + demo posts seeding script
+│   └── index.js         # Express app composition + server bootstrap
+├── .env.example
+└── package.json
+```
+
+</details>
+
+<details>
+<summary><b>Client</b> — React 19 + Vite SPA</summary>
+
+```
+client/
+├── public/              # _redirects (Netlify SPA fallback)
+├── src/
+│   ├── api/             # Axios instance with interceptors
+│   ├── components/      # UI kit, Navbar, Footer, PostCard, SEO, etc.
+│   │   ├── admin/       # PostForm (create/edit)
+│   │   └── ui/          # Button, Input, Modal, Alert, Badge, Toast…
+│   ├── context/         # AuthContext, ThemeContext, ToastContext
+│   ├── hooks/           # useDocumentTitle
+│   ├── layouts/         # MainLayout (Navbar + Footer)
+│   ├── pages/           # Home, PostDetail, Login, Register, Admin…
+│   ├── utils/           # markdownComponents, readingTime
+│   ├── App.jsx          # routes + lazy loading
+│   └── main.jsx         # entry point (provider tree)
+├── netlify.toml
+├── vite.config.js
+└── package.json
+```
+
+</details>
+
+<details>
+<summary><b>Repository root</b> — docs & governance</summary>
+
 ```
 simple-blog-mern/
-├── client/                           # React frontend (Vite)
-│   ├── src/
-│   │   ├── api/
-│   │   │   └── axios.js              # Axios instance with interceptors
-│   │   ├── components/
-│   │   │   ├── admin/
-│   │   │   │   └── PostForm.jsx      # Post create/edit form component
-│   │   │   ├── ui/
-│   │   │   │   ├── Alert.jsx         # Alert component
-│   │   │   │   ├── Badge.jsx         # Badge component
-│   │   │   │   ├── Button.jsx        # Button component
-│   │   │   │   ├── Input.jsx         # Input component
-│   │   │   │   ├── Modal.jsx         # Modal dialog component
-│   │   │   │   ├── Skeleton.jsx      # Loading skeleton component
-│   │   │   │   ├── Spinner.jsx       # Loading spinner component
-│   │   │   │   ├── ToastContainer.jsx # Toast notification container
-│   │   │   │   └── index.js          # UI component barrel export
-│   │   │   ├── Footer.jsx            # Site footer
-│   │   │   ├── Navbar.jsx            # Navigation bar with auth state
-│   │   │   ├── PostCard.jsx          # Blog post card for listing
-│   │   │   └── ProtectedRoute.jsx    # Route guard for admin pages
-│   │   ├── context/
-│   │   │   ├── AuthContext.jsx        # Authentication state & methods
-│   │   │   └── ToastContext.jsx       # Toast notification state
-│   │   ├── layouts/
-│   │   │   └── MainLayout.jsx         # Page layout with Navbar & Footer
-│   │   ├── pages/
-│   │   │   ├── AdminDashboard.jsx     # Admin post management panel
-│   │   │   ├── CreatePostPage.jsx     # New post creation page
-│   │   │   ├── EditPostPage.jsx       # Post editing page
-│   │   │   ├── HomePage.jsx           # Public blog listing with filters
-│   │   │   ├── LoginPage.jsx          # User login page
-│   │   │   ├── PostDetailPage.jsx     # Full post view with Markdown
-│   │   │   └── RegisterPage.jsx       # User registration page
-│   │   ├── utils/
-│   │   │   └── markdownComponents.jsx # Custom Markdown renderers
-│   │   ├── App.jsx                    # Route definitions & lazy loading
-│   │   ├── index.css                  # Tailwind CSS imports
-│   │   └── main.jsx                   # App entry point
-│   ├── public/
-│   │   └── _redirects                 # Netlify SPA redirect rule
-│   ├── netlify.toml                   # Netlify build configuration
-│   ├── vite.config.js                 # Vite + Tailwind plugin config
-│   └── package.json
-├── server/                            # Express backend
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── cloudinary.js          # Cloudinary SDK configuration
-│   │   │   ├── db.js                  # MongoDB connection setup
-│   │   │   └── multer.js              # Multer upload configuration
-│   │   ├── controllers/
-│   │   │   ├── authController.js      # Register, login, getMe handlers
-│   │   │   ├── categoryController.js  # Category & tag aggregation
-│   │   │   └── postController.js      # Post CRUD & filter handlers
-│   │   ├── middlewares/
-│   │   │   ├── errorHandler.js        # Centralized error handling
-│   │   │   ├── requireAdmin.js        # Admin role authorization
-│   │   │   └── verifyToken.js         # JWT verification middleware
-│   │   ├── models/
-│   │   │   ├── Post.js                # Post schema with slug & excerpt
-│   │   │   └── User.js               # User schema with bcrypt hashing
-│   │   ├── routes/
-│   │   │   ├── authRoutes.js          # Auth endpoints with rate limiter
-│   │   │   ├── categoryRoutes.js      # Category & tag endpoints
-│   │   │   ├── postRoutes.js          # Post CRUD endpoints
-│   │   │   └── uploadRoutes.js        # Image upload endpoint
-│   │   ├── utils/
-│   │   │   ├── escapeRegex.js         # Regex escaping for search
-│   │   │   ├── generateToken.js       # JWT token generation
-│   │   │   └── validateObjectId.js    # MongoDB ObjectId validation
-│   │   └── index.js                   # Server entry point
-│   ├── .env.example                   # Environment variable template
-│   ├── requests.http                  # API test requests
-│   └── package.json
+├── client/              # → see Client panel above
+├── server/              # → see Server panel above
+├── .github/             # issue templates, PR template, governance docs
+│   ├── ISSUE_TEMPLATE/  # bug_report.yml, feature_request.yml, config.yml
+│   ├── CODE_OF_CONDUCT.md
+│   ├── CONTRIBUTING.md
+│   ├── SECURITY.md
+│   └── PULL_REQUEST_TEMPLATE.md
+├── LICENSE
 └── README.md
 ```
+
+</details>
 
 ---
 
@@ -340,6 +412,8 @@ simple-blog-mern/
 - **Role-Based Authorization** — `requireAdmin` middleware blocks non-admin users from sensitive operations
 - **Request Size Limiting** — JSON and URL-encoded bodies capped at 10 KB to prevent payload attacks
 - **Input Validation** — Server-side validation on all endpoints (username regex, email format, required fields)
+- **Type-Safe Query & Body Handling** — Query params and request body fields are coerced/checked to be strings, preventing NoSQL operator injection (e.g. `?category[$gt]=`) and unexpected types reaching MongoDB
+- **ReDoS-Safe Search** — User search input is escaped before being used in MongoDB `$regex` queries
 - **File Upload Validation** — Only JPEG, PNG, and WebP accepted; 5 MB size limit via Multer
 - **Response Compression** — Gzip compression via compression middleware for reduced bandwidth
 - **Auto Session Expiry** — Client-side interceptor detects 401 responses and auto-logs out the user
@@ -406,11 +480,14 @@ simple-blog-mern/
 - ✅ Category and tag filtering with counts
 - ✅ Debounced search with URL query parameters
 - ✅ Load-more pagination
+- ✅ Dark mode with persisted preference
+- ✅ SEO meta tags and reading time
+- ✅ Related posts and social share buttons
 - ✅ Responsive mobile-first design
 - ✅ Reusable UI component library
 - ✅ Toast notification system
 - ✅ Lazy-loaded pages with Suspense
-- ✅ Centralized error handling
+- ✅ Centralized error handling and request type validation
 - ✅ Rate limiting and security middleware
 - ✅ SEO-friendly slug generation
 
@@ -445,6 +522,8 @@ Contributions are welcome! Follow these steps:
 | `docs:` | Documentation changes |
 | `chore:` | Maintenance and dependency updates |
 
+Please read our [Contributing Guide](.github/CONTRIBUTING.md) and [Code of Conduct](.github/CODE_OF_CONDUCT.md) before submitting a pull request.
+
 ---
 
 ## License
@@ -478,7 +557,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-- [Open an Issue](https://github.com/Serkanbyx/simple-blog-mern/issues)
+- [Open an Issue](https://github.com/serkanbyx/simple-blog-mern/issues)
 - Email: [serkanbyx1@gmail.com](mailto:serkanbyx1@gmail.com)
 - Website: [serkanbayraktar.com](https://serkanbayraktar.com/)
 

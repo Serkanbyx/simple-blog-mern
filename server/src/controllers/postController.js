@@ -14,25 +14,47 @@ const MAX_TAGS_COUNT = 10;
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
+// Express may parse bracket-notation query params (e.g. ?category[$gt]=) into
+// objects. Coerce a query value to a trimmed string, ignoring non-string input
+// to prevent unexpected types reaching the database query.
+const toQueryString = (value) =>
+  typeof value === 'string' ? value.trim() : '';
+
+// Normalize and bound the tags payload coming from the request body.
+const sanitizeTags = (tags) =>
+  Array.isArray(tags)
+    ? tags
+        .filter((tag) => typeof tag === 'string')
+        .map((tag) => tag.trim())
+        .filter(Boolean)
+        .slice(0, MAX_TAGS_COUNT)
+    : [];
+
 // GET /api/posts
-const getAllPosts = async (req, res) => {
+const getAllPosts = async (req, res, next) => {
   try {
-    const page = Math.max(parseInt(req.query.page) || DEFAULT_PAGE, 1);
-    const limit = Math.min(parseInt(req.query.limit) || DEFAULT_LIMIT, MAX_LIMIT);
-    const { category, tag, search } = req.query;
+    const page = Math.max(parseInt(req.query.page, 10) || DEFAULT_PAGE, 1);
+    const limit = Math.min(
+      parseInt(req.query.limit, 10) || DEFAULT_LIMIT,
+      MAX_LIMIT,
+    );
+
+    const category = toQueryString(req.query.category);
+    const tag = toQueryString(req.query.tag);
+    const search = toQueryString(req.query.search);
 
     const filter = {};
 
     if (category) {
-      filter.category = category.trim();
+      filter.category = category;
     }
 
     if (tag) {
-      filter.tags = tag.trim();
+      filter.tags = tag;
     }
 
     if (search) {
-      filter.title = { $regex: escapeRegex(search.trim()), $options: 'i' };
+      filter.title = { $regex: escapeRegex(search), $options: 'i' };
     }
 
     const skip = (page - 1) * limit;
@@ -52,12 +74,12 @@ const getAllPosts = async (req, res) => {
 
     res.json({ posts, currentPage: page, totalPages, totalPosts });
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // GET /api/posts/:slug
-const getPostBySlug = async (req, res) => {
+const getPostBySlug = async (req, res, next) => {
   try {
     const { slug } = req.params;
 
@@ -73,12 +95,12 @@ const getPostBySlug = async (req, res) => {
 
     res.json(post);
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // GET /api/posts/id/:id (admin — fetch single post by ObjectId)
-const getPostById = async (req, res) => {
+const getPostById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -94,41 +116,39 @@ const getPostById = async (req, res) => {
 
     res.json(post);
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // POST /api/posts (admin only)
-const createPost = async (req, res) => {
+const createPost = async (req, res, next) => {
   try {
     const { title, content, image, category, tags } = req.body;
 
-    if (!title || !title.trim()) {
+    if (!title || typeof title !== 'string' || !title.trim()) {
       return res.status(400).json({ message: 'Title is required.' });
     }
 
     if (title.trim().length > MAX_TITLE_LENGTH) {
-      return res.status(400).json({ message: `Title must be at most ${MAX_TITLE_LENGTH} characters.` });
+      return res
+        .status(400)
+        .json({ message: `Title must be at most ${MAX_TITLE_LENGTH} characters.` });
     }
 
-    if (!content || !content.trim()) {
+    if (!content || typeof content !== 'string' || !content.trim()) {
       return res.status(400).json({ message: 'Content is required.' });
     }
 
-    if (!category || !category.trim()) {
+    if (!category || typeof category !== 'string' || !category.trim()) {
       return res.status(400).json({ message: 'Category is required.' });
     }
-
-    const sanitizedTags = Array.isArray(tags)
-      ? tags.map((t) => t.trim()).filter(Boolean).slice(0, MAX_TAGS_COUNT)
-      : [];
 
     const postData = {
       title: title.trim(),
       content: content.trim(),
-      image: image ? image.trim() : '',
+      image: typeof image === 'string' ? image.trim() : '',
       category: category.trim(),
-      tags: sanitizedTags,
+      tags: sanitizeTags(tags),
       author: req.user.id,
     };
 
@@ -139,7 +159,8 @@ const createPost = async (req, res) => {
       if (err.code === 11000 && err.keyPattern?.slug) {
         const suffix = crypto.randomBytes(3).toString('hex');
         const retryDoc = new Post(postData);
-        retryDoc.slug = slugify(postData.title, { lower: true, strict: true }) + '-' + suffix;
+        retryDoc.slug =
+          slugify(postData.title, { lower: true, strict: true }) + '-' + suffix;
         retryDoc._skipSlugGeneration = true;
         post = await retryDoc.save();
       } else {
@@ -151,17 +172,12 @@ const createPost = async (req, res) => {
 
     res.status(201).json(populated);
   } catch (error) {
-    console.error('[CREATE POST ERROR]', error.name, error.message, error.stack);
-    if (error.name === 'ValidationError') {
-      const firstMessage = Object.values(error.errors)[0]?.message;
-      return res.status(400).json({ message: firstMessage || 'Validation error.' });
-    }
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // PUT /api/posts/:id (admin only)
-const updatePost = async (req, res) => {
+const updatePost = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -178,25 +194,35 @@ const updatePost = async (req, res) => {
     const { title, content, image, category, tags } = req.body;
 
     if (title !== undefined) {
+      if (typeof title !== 'string') {
+        return res.status(400).json({ message: 'Title must be a string.' });
+      }
       post.title = title.trim();
     }
 
     if (content !== undefined) {
+      if (typeof content !== 'string') {
+        return res.status(400).json({ message: 'Content must be a string.' });
+      }
       post.content = content.trim();
     }
 
     if (image !== undefined) {
+      if (typeof image !== 'string') {
+        return res.status(400).json({ message: 'Image must be a string.' });
+      }
       post.image = image.trim();
     }
 
     if (category !== undefined) {
+      if (typeof category !== 'string') {
+        return res.status(400).json({ message: 'Category must be a string.' });
+      }
       post.category = category.trim();
     }
 
     if (tags !== undefined) {
-      post.tags = Array.isArray(tags)
-        ? tags.map((t) => t.trim()).filter(Boolean).slice(0, MAX_TAGS_COUNT)
-        : [];
+      post.tags = sanitizeTags(tags);
     }
 
     const updatedPost = await post.save();
@@ -204,19 +230,12 @@ const updatePost = async (req, res) => {
 
     res.json(populated);
   } catch (error) {
-    if (error.name === 'ValidationError') {
-      const firstMessage = Object.values(error.errors)[0]?.message;
-      return res.status(400).json({ message: firstMessage || 'Validation error.' });
-    }
-    if (error.code === 11000 && error.keyPattern?.slug) {
-      return res.status(409).json({ message: 'A post with this title already exists.' });
-    }
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // DELETE /api/posts/:id (admin only)
-const deletePost = async (req, res) => {
+const deletePost = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -237,12 +256,12 @@ const deletePost = async (req, res) => {
 
     res.json({ message: 'Post deleted successfully.' });
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // GET /api/posts/filters — distinct categories & tags for filter UI
-const getFilterOptions = async (_req, res) => {
+const getFilterOptions = async (_req, res, next) => {
   try {
     const [categories, tags] = await Promise.all([
       Post.distinct('category'),
@@ -254,8 +273,16 @@ const getFilterOptions = async (_req, res) => {
       tags: tags.filter(Boolean).sort(),
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
-module.exports = { getAllPosts, getPostBySlug, getPostById, createPost, updatePost, deletePost, getFilterOptions };
+module.exports = {
+  getAllPosts,
+  getPostBySlug,
+  getPostById,
+  createPost,
+  updatePost,
+  deletePost,
+  getFilterOptions,
+};

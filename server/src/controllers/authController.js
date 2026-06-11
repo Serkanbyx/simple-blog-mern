@@ -11,21 +11,21 @@ const formatUserResponse = (user, token) => ({
 });
 
 // POST /api/auth/register
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
 
-    if (!username || !USERNAME_REGEX.test(username)) {
+    if (typeof username !== 'string' || !USERNAME_REGEX.test(username)) {
       return res.status(400).json({
         message: 'Username must be 3-30 alphanumeric characters.',
       });
     }
 
-    if (!email || !EMAIL_REGEX.test(email)) {
+    if (typeof email !== 'string' || !EMAIL_REGEX.test(email)) {
       return res.status(400).json({ message: 'Please provide a valid email address.' });
     }
 
-    if (!password || password.length < MIN_PASSWORD_LENGTH) {
+    if (typeof password !== 'string' || password.length < MIN_PASSWORD_LENGTH) {
       return res.status(400).json({
         message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
       });
@@ -55,17 +55,16 @@ const register = async (req, res) => {
 
     res.status(201).json(formatUserResponse(user, token));
   } catch (error) {
-    console.error('[REGISTER ERROR]', error.message, error.stack);
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // POST /api/auth/login
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
@@ -87,12 +86,12 @@ const login = async (req, res) => {
 
     res.json(formatUserResponse(user, token));
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
 // GET /api/auth/me (protected)
-const getMe = async (req, res) => {
+const getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
 
@@ -104,7 +103,7 @@ const getMe = async (req, res) => {
       user: { id: user._id, username: user.username, email: user.email, role: user.role },
     });
   } catch (error) {
-    res.status(500).json({ message: 'Server error.' });
+    next(error);
   }
 };
 
