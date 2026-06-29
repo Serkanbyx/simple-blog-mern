@@ -22,11 +22,18 @@
 
   <p>
     <a href="https://simple-blog-mernn.netlify.app/">Live Demo</a> •
+    <a href="#screenshots">Screenshots</a> •
     <a href="#features">Features</a> •
     <a href="#installation">Quick Start</a> •
     <a href="#api-endpoints">API Docs</a> •
     <a href="#architecture">Architecture</a>
   </p>
+
+  <br />
+
+  <a href="https://simple-blog-mernn.netlify.app/">
+    <img src="assets/screenshots/homepage.png" alt="Simple Blog MERN homepage preview" width="800" />
+  </a>
 </div>
 
 ---
@@ -63,6 +70,24 @@
 ## Live Demo
 
 [🚀 View Live Demo](https://simple-blog-mernn.netlify.app/)
+
+---
+
+## Screenshots
+
+Captured from the [live demo](https://simple-blog-mernn.netlify.app/).
+
+| Homepage | Category & Tag Filters | Post Detail |
+| :---: | :---: | :---: |
+| ![Homepage — post grid with search and filters](assets/screenshots/homepage.png) | ![Category filter — React posts](assets/screenshots/catalog-filter.png) | ![Post detail — article header and metadata](assets/screenshots/post-detail.png) |
+
+| Markdown & Syntax Highlighting | Login | Register |
+| :---: | :---: | :---: |
+| ![Markdown rendering with Prism code blocks](assets/screenshots/markdown-rendering.png) | ![Login page](assets/screenshots/login.png) | ![Register page](assets/screenshots/register.png) |
+
+| Admin Dashboard | Create Post (Markdown Editor) | Dark Mode |
+| :---: | :---: | :---: |
+| ![Admin dashboard with post management table](assets/screenshots/admin-dashboard.png) | ![Create post form with live Markdown preview](assets/screenshots/create-post.png) | ![Homepage in dark mode](assets/screenshots/dark-mode.png) |
 
 ---
 
@@ -386,6 +411,8 @@ client/
 
 ```
 simple-blog-mern/
+├── assets/
+│   └── screenshots/     # README preview images
 ├── client/              # → see Client panel above
 ├── server/              # → see Server panel above
 ├── .github/             # issue templates, PR template, governance docs
