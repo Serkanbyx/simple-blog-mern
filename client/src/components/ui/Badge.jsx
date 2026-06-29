@@ -6,7 +6,7 @@ const colorStyles = {
   purple: 'bg-purple-100 text-purple-700',
   pink: 'bg-pink-100 text-pink-700',
   indigo: 'bg-indigo-100 text-indigo-700',
-  gray: 'bg-gray-100 text-gray-700',
+  gray: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
   emerald: 'bg-emerald-100 text-emerald-700',
   orange: 'bg-orange-100 text-orange-700',
 }

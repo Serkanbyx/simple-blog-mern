@@ -23,23 +23,23 @@ const formatDate = (dateString) => {
 
 const DetailSkeleton = () => (
   <div className="animate-pulse">
-    <div className="mb-6 aspect-2/1 w-full rounded-xl bg-gray-200 sm:mb-8 sm:aspect-5/2 lg:aspect-3/1" />
+    <div className="mb-6 aspect-2/1 w-full rounded-xl bg-gray-200 sm:mb-8 sm:aspect-5/2 lg:aspect-3/1 dark:bg-gray-800" />
     <div className="mx-auto max-w-3xl">
-      <div className="mb-4 h-8 w-3/4 rounded bg-gray-200" />
+      <div className="mb-4 h-8 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
       <div className="mb-6 flex items-center gap-3">
-        <div className="h-9 w-9 rounded-full bg-gray-200" />
-        <div className="h-4 w-24 rounded bg-gray-200" />
-        <div className="h-4 w-32 rounded bg-gray-200" />
-        <div className="h-6 w-20 rounded-full bg-gray-200" />
+        <div className="h-9 w-9 rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-32 rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-6 w-20 rounded-full bg-gray-200 dark:bg-gray-700" />
       </div>
       <div className="space-y-3">
-        <div className="h-4 w-full rounded bg-gray-200" />
-        <div className="h-4 w-full rounded bg-gray-200" />
-        <div className="h-4 w-5/6 rounded bg-gray-200" />
-        <div className="h-4 w-full rounded bg-gray-200" />
-        <div className="h-4 w-4/6 rounded bg-gray-200" />
-        <div className="h-4 w-full rounded bg-gray-200" />
-        <div className="h-4 w-3/4 rounded bg-gray-200" />
+        <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-5/6 rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-4/6 rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@ const DetailSkeleton = () => (
 const NotFound = () => (
   <div className="py-20 text-center">
     <svg
-      className="mx-auto mb-4 h-20 w-20 text-gray-300"
+      className="mx-auto mb-4 h-20 w-20 text-gray-300 dark:text-gray-600"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -60,8 +60,8 @@ const NotFound = () => (
         d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
       />
     </svg>
-    <h2 className="mb-2 text-2xl font-bold text-gray-700">Post not found</h2>
-    <p className="mb-6 text-gray-500">The post you&apos;re looking for doesn&apos;t exist or may have been removed.</p>
+    <h2 className="mb-2 text-2xl font-bold text-gray-700 dark:text-gray-200">Post not found</h2>
+    <p className="mb-6 text-gray-500 dark:text-gray-400">The post you&apos;re looking for doesn&apos;t exist or may have been removed.</p>
     <Link
       to="/"
       className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700"
@@ -109,15 +109,15 @@ const PostDetailPage = () => {
   if (error) {
     return (
       <div className="py-20 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/50">
           <svg className="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
           </svg>
         </div>
-        <p className="mb-4 text-gray-600">{error}</p>
+        <p className="mb-4 text-gray-600 dark:text-gray-300">{error}</p>
         <button
           onClick={() => window.location.reload()}
-          className="text-sm font-semibold text-blue-600 underline hover:text-blue-800"
+          className="text-sm font-semibold text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
         >
           Try again
         </button>
@@ -138,7 +138,7 @@ const PostDetailPage = () => {
       {/* Back link */}
       <Link
         to="/"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-blue-600"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
       >
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
@@ -169,21 +169,21 @@ const PostDetailPage = () => {
         {/* Meta */}
         <div className="mb-8 flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700 dark:bg-blue-900/60 dark:text-blue-300">
               {author?.username?.charAt(0).toUpperCase() || '?'}
             </div>
-            <span className="font-medium text-gray-700">{author?.username || 'Unknown'}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-200">{author?.username || 'Unknown'}</span>
           </div>
 
-          <span className="text-gray-300">•</span>
+          <span className="text-gray-300 dark:text-gray-600">•</span>
           <time dateTime={createdAt}>{formatDate(createdAt)}</time>
 
-          <span className="text-gray-300">•</span>
-          <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700">
+          <span className="text-gray-300 dark:text-gray-600">•</span>
+          <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/60 dark:text-blue-300">
             {category}
           </span>
 
-          <span className="text-gray-300">•</span>
+          <span className="text-gray-300 dark:text-gray-600">•</span>
           <span>{getReadingTime(content)} min read</span>
         </div>
 
@@ -193,7 +193,7 @@ const PostDetailPage = () => {
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-600"
+                className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-600 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300"
               >
                 #{tag}
               </span>
@@ -207,7 +207,7 @@ const PostDetailPage = () => {
         </div>
 
         {/* Divider */}
-        <hr className="mb-8 border-gray-200" />
+        <hr className="mb-8 border-gray-200 dark:border-gray-700" />
 
         {/* Markdown content */}
         <div className="markdown-content">

@@ -13,7 +13,7 @@ const Footer = () => {
             href="https://serkanbayraktar.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 transition-colors hover:text-gray-700"
+            className="text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             Serkanby
           </a>
@@ -22,7 +22,7 @@ const Footer = () => {
             href="https://github.com/Serkanbyx"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-500 transition-colors hover:text-gray-700"
+            className="text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             Github
           </a>

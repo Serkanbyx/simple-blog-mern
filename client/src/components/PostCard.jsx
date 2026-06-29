@@ -46,15 +46,15 @@ const PostCard = ({ post }) => {
 
         {/* Author & date */}
         <div className="flex items-center gap-2 border-t border-gray-100 pt-4 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 dark:bg-blue-900/60 dark:text-blue-300">
             {author?.username?.charAt(0).toUpperCase() || '?'}
           </div>
           <span className="font-medium text-gray-700 dark:text-gray-300">{author?.username || 'Unknown'}</span>
-          <span className="text-gray-300">•</span>
+          <span className="text-gray-300 dark:text-gray-600">•</span>
           <time dateTime={createdAt}>{formatDate(createdAt)}</time>
           {readingTime && (
             <>
-              <span className="text-gray-300">•</span>
+              <span className="text-gray-300 dark:text-gray-600">•</span>
               <span>{readingTime} min read</span>
             </>
           )}

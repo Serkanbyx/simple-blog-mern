@@ -45,15 +45,15 @@ const EditPostPage = () => {
   if (fetchError) {
     return (
       <div className="py-20 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100">
-          <svg className="h-7 w-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-100 dark:bg-red-950/40">
+          <svg className="h-7 w-7 text-red-500 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
           </svg>
         </div>
-        <p className="mb-4 text-sm text-red-600">{fetchError}</p>
+        <p className="mb-4 text-sm text-red-600 dark:text-red-400">{fetchError}</p>
         <Link
           to="/admin"
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
         >
           Back to Admin Panel
         </Link>
@@ -66,14 +66,14 @@ const EditPostPage = () => {
       <div className="mb-8 flex items-center gap-4">
         <Link
           to="/admin"
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200"
           aria-label="Back to admin panel"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
         </Link>
-        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">Edit Post</h1>
+        <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl dark:text-white">Edit Post</h1>
       </div>
 
       <PostForm

@@ -1,6 +1,6 @@
 const Base = ({ className = '' }) => (
   <div
-    className={`animate-pulse rounded bg-gray-200 ${className}`}
+    className={`animate-pulse rounded bg-gray-200 dark:bg-gray-700 ${className}`}
     aria-hidden="true"
   />
 )
@@ -23,16 +23,16 @@ const TextBlock = ({ lines = 3 }) => {
 
 const PostCardSkeleton = () => (
   <div
-    className="animate-pulse overflow-hidden rounded-xl bg-white shadow-sm"
+    className="animate-pulse overflow-hidden rounded-xl bg-white shadow-sm dark:bg-gray-800"
     aria-hidden="true"
   >
-    <div className="h-48 bg-gray-200" />
+    <div className="h-48 bg-gray-200 dark:bg-gray-700" />
     <div className="p-5">
       <Base className="mb-3 h-4 w-3/4" />
       <Base className="mb-2 h-3 w-full" />
       <Base className="mb-2 h-3 w-5/6" />
       <Base className="mb-4 h-3 w-2/3" />
-      <div className="flex items-center gap-2 border-t border-gray-100 pt-4">
+      <div className="flex items-center gap-2 border-t border-gray-100 pt-4 dark:border-gray-700">
         <Base className="h-7 w-7 rounded-full" />
         <Base className="h-3 w-20" />
       </div>

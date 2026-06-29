@@ -61,16 +61,16 @@ const Navbar = () => {
                 </NavLink>
               )}
 
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 Welcome,{' '}
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-gray-700 dark:text-gray-200">
                   {user.username}
                 </span>
               </span>
 
               <button
                 onClick={logout}
-                className="rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer"
+                className="rounded-lg bg-red-50 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer dark:bg-red-950/40 dark:text-red-400 dark:hover:bg-red-950/60"
               >
                 Logout
               </button>
@@ -93,7 +93,7 @@ const Navbar = () => {
         {/* Mobile Hamburger Button */}
         <button
           onClick={toggleMobileMenu}
-          className="relative flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 md:hidden cursor-pointer"
+          className="relative flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100 md:hidden cursor-pointer dark:text-gray-300 dark:hover:bg-gray-800"
           aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={isMobileMenuOpen}
         >
@@ -167,9 +167,9 @@ const Navbar = () => {
                 </NavLink>
               )}
 
-              <span className="py-2 text-sm text-gray-500">
+              <span className="py-2 text-sm text-gray-500 dark:text-gray-400">
                 Welcome,{' '}
-                <span className="font-medium text-gray-700">
+                <span className="font-medium text-gray-700 dark:text-gray-200">
                   {user.username}
                 </span>
               </span>
@@ -179,7 +179,7 @@ const Navbar = () => {
                   logout()
                   closeMobileMenu()
                 }}
-                className="mt-1 w-full rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer"
+                className="mt-1 w-full rounded-lg bg-red-50 px-4 py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-100 cursor-pointer dark:bg-red-950/40 dark:text-red-400 dark:hover:bg-red-950/60"
               >
                 Logout
               </button>

@@ -47,7 +47,7 @@ const LoginPage = () => {
         {error && (
           <div
             role="alert"
-            className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600"
+            className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600 dark:bg-red-950/40 dark:text-red-300"
           >
             {error}
           </div>
@@ -57,7 +57,7 @@ const LoginPage = () => {
           <div>
             <label
               htmlFor="email"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Email
             </label>
@@ -69,14 +69,14 @@ const LoginPage = () => {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-800 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-800 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="mb-1 block text-sm font-medium text-gray-700"
+              className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
               Password
             </label>
@@ -88,7 +88,7 @@ const LoginPage = () => {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-800 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-800 transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
             />
           </div>
 
@@ -101,11 +101,11 @@ const LoginPage = () => {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
           Don&apos;t have an account?{' '}
           <Link
             to="/register"
-            className="font-medium text-blue-600 hover:text-blue-700"
+            className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
           >
             Create one
           </Link>

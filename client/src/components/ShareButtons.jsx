@@ -36,11 +36,11 @@ const ShareButtons = ({ title, url }) => {
   }, [title, shareUrl])
 
   const buttonClass =
-    'flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:border-gray-300 hover:text-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:outline-none'
+    'flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-500 transition-colors hover:border-gray-300 hover:text-gray-700 focus:ring-2 focus:ring-blue-500/20 focus:outline-none dark:border-gray-600 dark:text-gray-400 dark:hover:border-gray-500 dark:hover:text-gray-200'
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-medium text-gray-500">Share:</span>
+      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Share:</span>
 
       {/* Twitter / X */}
       <a

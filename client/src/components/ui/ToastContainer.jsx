@@ -19,15 +19,15 @@ const ICON_MAP = {
 }
 
 const STYLE_MAP = {
-  success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-  error: 'border-red-200 bg-red-50 text-red-800',
-  info: 'border-blue-200 bg-blue-50 text-blue-800',
+  success: 'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/50 dark:text-emerald-200',
+  error: 'border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200',
+  info: 'border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-200',
 }
 
 const CLOSE_STYLE_MAP = {
-  success: 'text-emerald-500 hover:text-emerald-700 hover:bg-emerald-100',
-  error: 'text-red-500 hover:text-red-700 hover:bg-red-100',
-  info: 'text-blue-500 hover:text-blue-700 hover:bg-blue-100',
+  success: 'text-emerald-500 hover:text-emerald-700 hover:bg-emerald-100 dark:text-emerald-400 dark:hover:text-emerald-200 dark:hover:bg-emerald-900/50',
+  error: 'text-red-500 hover:text-red-700 hover:bg-red-100 dark:text-red-400 dark:hover:text-red-200 dark:hover:bg-red-900/50',
+  info: 'text-blue-500 hover:text-blue-700 hover:bg-blue-100 dark:text-blue-400 dark:hover:text-blue-200 dark:hover:bg-blue-900/50',
 }
 
 const ToastContainer = () => {

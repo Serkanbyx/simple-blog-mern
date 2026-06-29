@@ -9,16 +9,16 @@ const POSTS_PER_PAGE = 6
 const DEBOUNCE_DELAY = 300
 
 const SkeletonCard = () => (
-  <div className="animate-pulse overflow-hidden rounded-xl bg-white shadow-sm">
-    <div className="h-48 bg-gray-200" />
+  <div className="animate-pulse overflow-hidden rounded-xl bg-white shadow-sm dark:bg-gray-800">
+    <div className="h-48 bg-gray-200 dark:bg-gray-700" />
     <div className="p-5">
-      <div className="mb-3 h-4 w-3/4 rounded bg-gray-200" />
-      <div className="mb-2 h-3 w-full rounded bg-gray-200" />
-      <div className="mb-2 h-3 w-5/6 rounded bg-gray-200" />
-      <div className="mb-4 h-3 w-2/3 rounded bg-gray-200" />
-      <div className="flex items-center gap-2 border-t border-gray-100 pt-4">
-        <div className="h-7 w-7 rounded-full bg-gray-200" />
-        <div className="h-3 w-20 rounded bg-gray-200" />
+      <div className="mb-3 h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mb-2 h-3 w-full rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mb-2 h-3 w-5/6 rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="mb-4 h-3 w-2/3 rounded bg-gray-200 dark:bg-gray-700" />
+      <div className="flex items-center gap-2 border-t border-gray-100 pt-4 dark:border-gray-700">
+        <div className="h-7 w-7 rounded-full bg-gray-200 dark:bg-gray-700" />
+        <div className="h-3 w-20 rounded bg-gray-200 dark:bg-gray-700" />
       </div>
     </div>
   </div>
@@ -230,7 +230,7 @@ const HomePage = () => {
           {searchInput && (
             <button
               onClick={() => setSearchInput('')}
-              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition hover:text-gray-600"
+              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-0.5 text-gray-400 transition hover:text-gray-600 dark:hover:text-gray-200"
               aria-label="Clear search"
             >
               <XIcon className="h-4 w-4" />
@@ -241,7 +241,7 @@ const HomePage = () => {
         {/* Category filter */}
         {categories.length > 0 && (
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="mr-1 text-sm font-medium text-gray-500">Category:</span>
+            <span className="mr-1 text-sm font-medium text-gray-500 dark:text-gray-400">Category:</span>
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -249,7 +249,7 @@ const HomePage = () => {
                 className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition ${
                   activeCategory === cat
                     ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
                 {cat}
@@ -261,15 +261,15 @@ const HomePage = () => {
         {/* Tag filter */}
         {tags.length > 0 && (
           <div className="flex flex-wrap items-center justify-center gap-2">
-            <span className="mr-1 text-sm font-medium text-gray-500">Tag:</span>
+            <span className="mr-1 text-sm font-medium text-gray-500 dark:text-gray-400">Tag:</span>
             {tags.map((t) => (
               <button
                 key={t}
                 onClick={() => handleTagChange(t)}
                 className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
                   activeTag === t
-                    ? 'border-blue-600 bg-blue-50 text-blue-700'
-                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-blue-600 bg-blue-50 text-blue-700 dark:border-blue-500 dark:bg-blue-950/50 dark:text-blue-300'
+                    : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:bg-gray-700'
                 }`}
               >
                 #{t}
@@ -283,7 +283,7 @@ const HomePage = () => {
           <div className="text-center">
             <button
               onClick={handleResetFilters}
-              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
+              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100"
             >
               <XIcon className="h-4 w-4" />
               Clear Filters
@@ -294,11 +294,11 @@ const HomePage = () => {
 
       {/* Error state */}
       {error && (
-        <div className="mb-8 rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-700">
+        <div className="mb-8 rounded-lg border border-red-200 bg-red-50 p-4 text-center text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
           <p>{error}</p>
           <button
             onClick={() => fetchPosts(1)}
-            className="mt-2 text-sm font-semibold text-red-600 underline hover:text-red-800"
+            className="mt-2 text-sm font-semibold text-red-600 underline hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
           >
             Try again
           </button>
@@ -318,7 +318,7 @@ const HomePage = () => {
       {!loading && !error && posts.length === 0 && (
         <div className="py-20 text-center">
           <svg
-            className="mx-auto mb-4 h-16 w-16 text-gray-300"
+            className="mx-auto mb-4 h-16 w-16 text-gray-300 dark:text-gray-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -330,10 +330,10 @@ const HomePage = () => {
               d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
             />
           </svg>
-          <h2 className="mb-2 text-xl font-semibold text-gray-700">
+          <h2 className="mb-2 text-xl font-semibold text-gray-700 dark:text-gray-200">
             {hasActiveFilters ? 'No results found' : 'No posts yet'}
           </h2>
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             {hasActiveFilters
               ? 'Try a different keyword or filters.'
               : 'The first post will appear here once published.'}
@@ -341,7 +341,7 @@ const HomePage = () => {
           {hasActiveFilters && (
             <button
               onClick={handleResetFilters}
-              className="mt-4 text-sm font-semibold text-blue-600 underline hover:text-blue-800"
+              className="mt-4 text-sm font-semibold text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
             >
               Clear Filters
             </button>
@@ -353,7 +353,7 @@ const HomePage = () => {
       {!loading && posts.length > 0 && (
         <>
           {totalPosts > 0 && (
-            <p className="mb-4 text-sm text-gray-500">
+            <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">
               {totalPosts} {totalPosts === 1 ? 'post' : 'posts'} found
             </p>
           )}
@@ -370,7 +370,7 @@ const HomePage = () => {
               <button
                 onClick={handleLoadMore}
                 disabled={loadingMore}
-                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow transition-colors duration-200 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 dark:focus:ring-offset-gray-950"
               >
                 {loadingMore ? (
                   <>

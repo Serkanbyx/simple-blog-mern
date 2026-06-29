@@ -22,7 +22,7 @@ const Input = forwardRef(
         {label && (
           <label
             htmlFor={inputId}
-            className="mb-1 block text-sm font-medium text-gray-700"
+            className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300"
           >
             {label}
           </label>
@@ -41,7 +41,7 @@ const Input = forwardRef(
             type={type}
             aria-invalid={!!error}
             aria-describedby={error ? errorId : undefined}
-            className={`w-full rounded-lg border px-4 py-2.5 text-gray-800 transition focus:ring-2 focus:outline-none ${
+            className={`w-full rounded-lg border px-4 py-2.5 text-gray-800 transition focus:ring-2 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 ${
               Icon ? 'pl-10' : ''
             } ${
               error

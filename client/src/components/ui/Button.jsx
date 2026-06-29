@@ -4,11 +4,11 @@ const variantStyles = {
   primary:
     'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500/20 shadow',
   secondary:
-    'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-300/30 shadow-sm',
+    'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-300/30 shadow-sm dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700',
   danger:
     'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500/20 shadow',
   ghost:
-    'text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-300/30',
+    'text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-300/30 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-100',
 }
 
 const sizeStyles = {

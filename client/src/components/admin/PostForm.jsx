@@ -192,7 +192,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
       <div className="flex items-center justify-center py-20">
         <div className="flex items-center gap-3">
           <span className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
-          <span className="text-sm text-gray-500">Loading post...</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">Loading post...</span>
         </div>
       </div>
     )
@@ -203,7 +203,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
   return (
     <>
       {errors.submit && (
-        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
           {errors.submit}
         </div>
       )}
@@ -214,7 +214,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
           <div className="flex-1 space-y-6">
             {/* Title */}
             <div>
-              <label htmlFor="title" className="mb-1.5 block text-sm font-semibold text-gray-700">
+              <label htmlFor="title" className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Title
               </label>
               <input
@@ -223,26 +223,26 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter post title..."
-                className={`w-full rounded-lg border px-4 py-2.5 text-sm transition-colors focus:ring-2 focus:outline-none ${
+                className={`w-full rounded-lg border px-4 py-2.5 text-sm transition-colors focus:ring-2 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 ${
                   errors.title
-                    ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
-                    : 'border-gray-300 focus:border-blue-400 focus:ring-blue-100'
+                    ? 'border-red-300 focus:border-red-400 focus:ring-red-100 dark:border-red-800 dark:focus:ring-red-900/40'
+                    : 'border-gray-300 focus:border-blue-400 focus:ring-blue-100 dark:focus:border-blue-500 dark:focus:ring-blue-500/20'
                 }`}
               />
               {errors.title && (
                 <p className="mt-1 text-xs text-red-600">{errors.title}</p>
               )}
               {title.trim() && (
-                <p className="mt-1.5 text-xs text-gray-400">
-                  <span className="font-medium text-gray-500">Slug:</span>{' '}
-                  <span className="font-mono">{slug || '—'}</span>
+                <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">
+                  <span className="font-medium text-gray-500 dark:text-gray-400">Slug:</span>{' '}
+                  <span className="font-mono text-gray-600 dark:text-gray-300">{slug || '—'}</span>
                 </p>
               )}
             </div>
 
             {/* Category */}
             <div>
-              <label htmlFor="category" className="mb-1.5 block text-sm font-semibold text-gray-700">
+              <label htmlFor="category" className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Category
               </label>
               <select
@@ -252,10 +252,10 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                   setCategory(e.target.value)
                   if (e.target.value !== '__custom__') setCustomCategory('')
                 }}
-                className={`w-full rounded-lg border px-4 py-2.5 text-sm transition-colors focus:ring-2 focus:outline-none ${
+                className={`w-full rounded-lg border px-4 py-2.5 text-sm transition-colors focus:ring-2 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 ${
                   errors.category
-                    ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
-                    : 'border-gray-300 focus:border-blue-400 focus:ring-blue-100'
+                    ? 'border-red-300 focus:border-red-400 focus:ring-red-100 dark:border-red-800 dark:focus:ring-red-900/40'
+                    : 'border-gray-300 focus:border-blue-400 focus:ring-blue-100 dark:focus:border-blue-500 dark:focus:ring-blue-500/20'
                 }`}
               >
                 <option value="">Select a category...</option>
@@ -272,7 +272,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                   value={customCategory}
                   onChange={(e) => setCustomCategory(e.target.value)}
                   placeholder="Enter category name..."
-                  className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:outline-none"
+                  className="mt-2 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm transition-colors focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-blue-500 dark:focus:ring-blue-500/20"
                 />
               )}
               {errors.category && (
@@ -282,26 +282,26 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
 
             {/* Tags */}
             <div>
-              <label htmlFor="tagInput" className="mb-1.5 block text-sm font-semibold text-gray-700">
+              <label htmlFor="tagInput" className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Tags
               </label>
               <div
-                className={`flex flex-wrap items-center gap-2 rounded-lg border px-3 py-2 transition-colors focus-within:ring-2 ${
+                className={`flex flex-wrap items-center gap-2 rounded-lg border bg-white px-3 py-2 transition-colors focus-within:ring-2 dark:bg-gray-900 ${
                   errors.tags
-                    ? 'border-red-300 focus-within:border-red-400 focus-within:ring-red-100'
-                    : 'border-gray-300 focus-within:border-blue-400 focus-within:ring-blue-100'
+                    ? 'border-red-300 focus-within:border-red-400 focus-within:ring-red-100 dark:border-red-800 dark:focus-within:ring-red-900/40'
+                    : 'border-gray-300 focus-within:border-blue-400 focus-within:ring-blue-100 dark:border-gray-600 dark:focus-within:border-blue-500 dark:focus-within:ring-blue-500/20'
                 }`}
               >
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700"
+                    className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-950/50 dark:text-blue-300"
                   >
                     #{tag}
                     <button
                       type="button"
                       onClick={() => handleRemoveTag(tag)}
-                      className="ml-0.5 rounded-full p-0.5 text-blue-400 transition-colors hover:bg-blue-100 hover:text-blue-600"
+                      className="ml-0.5 rounded-full p-0.5 text-blue-400 transition-colors hover:bg-blue-100 hover:text-blue-600 dark:text-blue-400 dark:hover:bg-blue-900/50 dark:hover:text-blue-200"
                       aria-label={`Remove tag ${tag}`}
                     >
                       <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -317,32 +317,32 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={handleTagKeyDown}
                   placeholder={tags.length === 0 ? 'Type a tag and press Enter...' : 'Add tag...'}
-                  className="min-w-[120px] flex-1 border-none py-1 text-sm focus:ring-0 focus:outline-none"
+                  className="min-w-[120px] flex-1 border-none bg-transparent py-1 text-sm text-gray-900 focus:ring-0 focus:outline-none dark:text-gray-100"
                 />
               </div>
               {errors.tags && (
                 <p className="mt-1 text-xs text-red-600">{errors.tags}</p>
               )}
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                 Add tags with Enter or comma. Max 10 tags.
               </p>
             </div>
 
             {/* Featured Image */}
             <div>
-              <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+              <label className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Featured Image
               </label>
               {!imagePreview ? (
                 <label
                   htmlFor="imageUpload"
-                  className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-8 transition-colors hover:border-blue-400 hover:bg-blue-50/30"
+                  className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-8 transition-colors hover:border-blue-400 hover:bg-blue-50/30 dark:border-gray-600 dark:bg-gray-900/50 dark:hover:border-blue-500 dark:hover:bg-blue-950/20"
                 >
                   <svg className="mb-2 h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21Z" />
                   </svg>
-                  <span className="text-sm font-medium text-gray-600">Click to upload an image</span>
-                  <span className="mt-1 text-xs text-gray-400">JPEG, PNG, WebP — Max {MAX_FILE_SIZE_MB} MB</span>
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300">Click to upload an image</span>
+                  <span className="mt-1 text-xs text-gray-400 dark:text-gray-500">JPEG, PNG, WebP — Max {MAX_FILE_SIZE_MB} MB</span>
                   <input
                     id="imageUpload"
                     type="file"
@@ -352,7 +352,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                   />
                 </label>
               ) : (
-                <div className="relative overflow-hidden rounded-lg border border-gray-200">
+                <div className="relative overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
                   <img
                     src={imagePreview}
                     alt={hasExistingImage ? 'Current image' : 'Uploaded image preview'}
@@ -361,7 +361,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                   />
                   {uploading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                      <div className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow">
+                      <div className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow dark:bg-gray-800 dark:text-gray-200">
                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
                         Uploading...
                       </div>
@@ -383,7 +383,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                     type="button"
                     onClick={handleRemoveImage}
                     disabled={uploading}
-                    className="absolute top-2 right-2 rounded-full bg-white/90 p-1.5 text-gray-600 shadow transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                    className="absolute top-2 right-2 rounded-full bg-white/90 p-1.5 text-gray-600 shadow transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:bg-gray-800/90 dark:text-gray-300 dark:hover:bg-red-950/50 dark:hover:text-red-400"
                     aria-label="Remove image"
                   >
                     <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -399,8 +399,8 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
 
             {/* Content (Markdown editor) */}
             <div>
-              <label htmlFor="content" className="mb-1.5 block text-sm font-semibold text-gray-700">
-                Content <span className="font-normal text-gray-400">(Markdown)</span>
+              <label htmlFor="content" className="mb-1.5 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Content <span className="font-normal text-gray-400 dark:text-gray-500">(Markdown)</span>
               </label>
               <textarea
                 id="content"
@@ -408,26 +408,26 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="Write content in Markdown..."
                 rows={10}
-                className={`w-full resize-y rounded-lg border px-4 py-3 font-mono text-sm leading-relaxed transition-colors focus:ring-2 focus:outline-none ${
+                className={`w-full resize-y rounded-lg border px-4 py-3 font-mono text-sm leading-relaxed transition-colors focus:ring-2 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 ${
                   errors.content
-                    ? 'border-red-300 focus:border-red-400 focus:ring-red-100'
-                    : 'border-gray-300 focus:border-blue-400 focus:ring-blue-100'
+                    ? 'border-red-300 focus:border-red-400 focus:ring-red-100 dark:border-red-800 dark:focus:ring-red-900/40'
+                    : 'border-gray-300 focus:border-blue-400 focus:ring-blue-100 dark:focus:border-blue-500 dark:focus:ring-blue-500/20'
                 }`}
               />
               {errors.content && (
                 <p className="mt-1 text-xs text-red-600">{errors.content}</p>
               )}
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                 **bold**, *italic*, ## heading, - list, `code`, [link](url), etc. are supported.
               </p>
             </div>
 
             {/* Action buttons */}
-            <div className="flex flex-col gap-3 border-t border-gray-200 pt-6 sm:flex-row sm:items-center sm:gap-4">
+            <div className="flex flex-col gap-3 border-t border-gray-200 pt-6 sm:flex-row sm:items-center sm:gap-4 dark:border-gray-700">
               <button
                 type="submit"
                 disabled={submitting || uploading}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-semibold text-white shadow transition-colors hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-60 dark:focus:ring-offset-gray-900"
               >
                 {submitting ? (
                   <>
@@ -451,7 +451,7 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
               </button>
               <Link
                 to="/admin"
-                className="rounded-lg border border-gray-300 px-5 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                className="rounded-lg border border-gray-300 px-5 py-2.5 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 Cancel
               </Link>
@@ -466,19 +466,19 @@ const PostForm = ({ initialData = null, onSubmit, isEditing = false, loading = f
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 </svg>
-                <span className="text-sm font-semibold text-gray-500">Preview</span>
+                <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">Preview</span>
               </div>
-              <div className="min-h-[200px] overflow-auto rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:min-h-[400px] sm:p-6">
+              <div className="min-h-[200px] overflow-auto rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:min-h-[400px] sm:p-6 dark:border-gray-700 dark:bg-gray-800">
                 {content.trim() ? (
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                     {content}
                   </ReactMarkdown>
                 ) : (
                   <div className="flex h-[160px] flex-col items-center justify-center text-center sm:h-[360px]">
-                    <svg className="mb-3 h-12 w-12 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                    <svg className="mb-3 h-12 w-12 text-gray-200 dark:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                     </svg>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-gray-400 dark:text-gray-500">
                       Your Markdown preview will appear here.
                     </p>
                   </div>
